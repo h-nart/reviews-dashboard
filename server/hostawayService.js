@@ -76,6 +76,66 @@ class HostawayService {
     }
   }
 
+  async fetchReviewById(reviewId) {
+    if (this.useMockData) {
+      console.log(`Using mock data for review ID: ${reviewId}`);
+      return this.processMockReviewById(reviewId);
+    }
+
+    try {
+      const token = await this.getAccessToken();
+      const headers = {
+        'Authorization': `Bearer ${token}`,
+        'X-Account-Id': this.accountId,
+        'Accept': 'application/json'
+      };
+
+      const url = `${this.baseUrl}/reviews/${reviewId}`;
+      
+      console.log(`Fetching single review from Hostaway API: ${url}`);
+      const response = await axios.get(url, { headers });
+      
+      return {
+        status: 'success',
+        result: response.data
+        };
+    } catch (error) {
+      console.error(`Failed to fetch review ${reviewId} from Hostaway API:`, error.message);
+      
+      // If it's a 404, return a structured response
+      if (error.response && error.response.status === 404) {
+        return {
+          status: 'error',
+          error: 'Review not found',
+          code: 404,
+          result: null
+        };
+      }
+      
+      // For other errors, try fallback to mock data
+      console.log('Falling back to mock data');
+      return this.processMockReviewById(reviewId);
+    }
+  }
+
+  processMockReviewById(reviewId) {
+    const review = hostawayMockResponse.result.find(r => r.id === parseInt(reviewId));
+    
+    if (!review) {
+      return {
+        status: 'error',
+        error: 'Review not found',
+        code: 404,
+        result: null
+      };
+    }
+
+    return {
+      status: 'success',
+      result: review
+    };
+  }
+
   processMockReviews(options = {}) {
     let reviews = [...hostawayMockResponse.result];
 

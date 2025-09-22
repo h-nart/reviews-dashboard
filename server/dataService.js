@@ -35,19 +35,11 @@ const channelMapping = {
   2022: 'google'
 };
 
-// Generate property ID from listing name (simple approach without grouping)
-const generatePropertyId = (listingName) => {
-  return listingName.toLowerCase()
-    .replace(/[^a-z0-9\s-]/g, '') // Remove special characters except spaces and hyphens
-    .replace(/\s+/g, '-') // Replace spaces with hyphens
-    .replace(/-+/g, '-') // Replace multiple hyphens with single
-    .replace(/^-|-$/g, ''); // Remove leading/trailing hyphens
-};
 
 // Normalize Hostaway review to internal format
 const normalizeHostawayReview = (hostawayReview) => {
-  // Generate property ID from listing name
-  const propertyId = generatePropertyId(hostawayReview.listingName);
+  // Use API-provided listingMapId
+  const listingMapId = hostawayReview.listingMapId;
   
   // Calculate average rating from categories (round to nearest integer)
   let averageRating = hostawayReview.rating;
@@ -69,8 +61,8 @@ const normalizeHostawayReview = (hostawayReview) => {
 
   return {
     id: hostawayReview.id,
-    propertyId: propertyId,
-    propertyName: hostawayReview.listingName, // Use full listing name as property name
+    listingId: listingMapId, // Use listingMapId as listingId
+    listingName: hostawayReview.listingName,
     guestName: hostawayReview.guestName,
     rating: averageRating,
     reviewDate: new Date(hostawayReview.submittedAt).toISOString(),
@@ -83,7 +75,6 @@ const normalizeHostawayReview = (hostawayReview) => {
     type: hostawayReview.type,
     status: hostawayReview.status, // Keep original status
     reviewCategories: hostawayReview.reviewCategory || [],
-    originalData: hostawayReview // Keep original for reference
   };
 };
 
@@ -141,11 +132,11 @@ const getApprovedReviews = () => {
   return normalized.filter(review => review.isApproved);
 };
 
-const getPublicReviews = (propertyId = null) => {
+const getPublicReviews = (listingId = null) => {
   const normalized = getNormalizedReviews();
   let reviews = normalized.filter(review => review.isPubliclyVisible);
-  if (propertyId) {
-    reviews = reviews.filter(review => review.propertyId === propertyId);
+  if (listingId) {
+    reviews = reviews.filter(review => review.listingId === parseInt(listingId));
   }
   return reviews;
 };
@@ -156,10 +147,15 @@ const getPropertySummary = () => {
   const properties = {};
   
   normalized.forEach(review => {
-    if (!properties[review.propertyId]) {
-      properties[review.propertyId] = {
-        propertyId: review.propertyId,
-        propertyName: review.propertyName,
+    // Skip reviews without listingId
+    if (!review.listingId) {
+      return;
+    }
+    
+    if (!properties[review.listingId]) {
+      properties[review.listingId] = {
+        listingId: review.listingId,
+        listingName: review.listingName,
         totalReviews: 0,
         approvedReviews: 0,
         averageRating: 0,
@@ -170,7 +166,7 @@ const getPropertySummary = () => {
       };
     }
     
-    const prop = properties[review.propertyId];
+    const prop = properties[review.listingId];
     prop.totalReviews++;
     
     if (review.isApproved) {
@@ -200,7 +196,7 @@ const getPropertySummary = () => {
     
     // Get recent reviews (last 5)
     prop.recentReviews = normalized
-      .filter(review => review.propertyId === prop.propertyId)
+      .filter(review => review.listingId === prop.listingId)
       .sort((a, b) => new Date(b.reviewDate) - new Date(a.reviewDate))
       .slice(0, 5);
   });
@@ -222,10 +218,36 @@ const updateReviewApproval = (reviewId, isApproved, isPubliclyVisible = null) =>
   return null;
 };
 
+// Shared function to process and normalize Hostaway reviews data
+const processHostawayReviews = (rawResponse) => {
+  // Normalize the reviews to internal format
+  const normalizedReviews = rawResponse.result.map(review => normalizeHostawayReview(review));
+  
+  // Group by listing for better organization
+  const reviewsByListing = {};
+  normalizedReviews.forEach(review => {
+    const listingKey = review.listingName;
+    if (!reviewsByListing[listingKey]) {
+      reviewsByListing[listingKey] = [];
+    }
+    reviewsByListing[listingKey].push(review);
+  });
+  
+  return {
+    total: rawResponse.total,
+    count: normalizedReviews.length,
+    offset: rawResponse.offset,
+    limit: rawResponse.limit,
+    normalizedReviews: normalizedReviews,
+    reviewsByListing: reviewsByListing
+  };
+};
+
 module.exports = {
   hostawayMockResponse,
   channelMapping,
   normalizeHostawayReview,
+  processHostawayReviews,
   getNormalizedReviews,
   getReviewsByProperty,
   getApprovedReviews,
@@ -237,6 +259,5 @@ module.exports = {
   filterReviewsByChannel,
   filterReviewsByChannelId,
   filterReviewsByDate,
-  sortReviewsByDate,
-  generatePropertyId
+  sortReviewsByDate
 };

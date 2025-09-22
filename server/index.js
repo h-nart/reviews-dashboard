@@ -134,30 +134,15 @@ app.get("/api/reviews/hostaway", async (req, res) => {
     // Fetch raw reviews from Hostaway API (or mock data)
     const rawResponse = await hostawayService.fetchReviews(options);
     
-    // Normalize the reviews to internal format
-    const { normalizeHostawayReview } = require('./dataService');
-    const normalizedReviews = rawResponse.result.map(review => normalizeHostawayReview(review));
-    
-    // Group by listing for better organization
-    const reviewsByListing = {};
-    normalizedReviews.forEach(review => {
-      const listingKey = review.originalData.listingName;
-      if (!reviewsByListing[listingKey]) {
-        reviewsByListing[listingKey] = [];
-      }
-      reviewsByListing[listingKey].push(review);
-    });
+    // Process and normalize using extracted function
+    const { processHostawayReviews } = require('./dataService');
+    const processedData = processHostawayReviews(rawResponse);
     
     res.json({
       status: 'success',
-      message: `Fetched and normalized ${normalizedReviews.length} reviews from Hostaway`,
+      message: `Fetched and normalized ${processedData.count} reviews from Hostaway`,
       data: {
-        total: rawResponse.total,
-        count: normalizedReviews.length,
-        offset: rawResponse.offset,
-        limit: rawResponse.limit,
-        normalizedReviews: normalizedReviews,
-        reviewsByListing: reviewsByListing,
+        ...processedData,
         rawResponse: process.env.NODE_ENV === 'development' ? rawResponse : undefined // Include raw data only in dev
       }
     });
@@ -165,6 +150,49 @@ app.get("/api/reviews/hostaway", async (req, res) => {
     console.error("Error fetching Hostaway reviews:", error);
     res.status(500).json({ 
       error: "Failed to fetch Hostaway reviews", 
+      details: error.message,
+      stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
+    });
+  }
+});
+
+// Get a single Hostaway review by review ID
+app.get("/api/reviews/hostaway/:id", async (req, res) => {
+  try {
+    const reviewId = parseInt(req.params.id);
+    
+    console.log(`Fetching Hostaway review with ID: ${reviewId}`);
+    
+    // Fetch raw review from Hostaway API (or mock data) using the hostawayService
+    const rawResponse = await hostawayService.fetchReviewById(reviewId);
+    
+    // Handle error cases
+    if (rawResponse.status === 'error') {
+      return res.status(rawResponse.code || 500).json({
+        status: 'error',
+        error: rawResponse.error,
+        reviewId: reviewId
+      });
+    }
+    
+    // Process and normalize the single review
+    const { normalizeHostawayReview } = require('./dataService');
+    const normalizedReview = normalizeHostawayReview(rawResponse.result);
+    
+    res.json({
+      status: 'success',
+      message: `Fetched and normalized review ${reviewId}`,
+      data: {
+        reviewId: reviewId,
+        review: normalizedReview,
+        rawResponse: process.env.NODE_ENV === 'development' ? rawResponse : undefined // Include raw data only in dev
+      }
+    });
+  } catch (error) {
+    console.error(`Error fetching Hostaway review ${req.params.id}:`, error);
+    res.status(500).json({ 
+      error: "Failed to fetch Hostaway review", 
+      reviewId: req.params.id,
       details: error.message,
       stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
     });
