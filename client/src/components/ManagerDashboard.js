@@ -5,6 +5,7 @@ import * as Select from '@radix-ui/react-select';
 import * as Switch from '@radix-ui/react-switch';
 import * as Toast from '@radix-ui/react-toast';
 import * as Tooltip from '@radix-ui/react-tooltip';
+import * as Dialog from '@radix-ui/react-dialog';
 import {
   Star,
   Filter,
@@ -19,7 +20,8 @@ import {
   BarChart3,
   ChevronDown,
   Check,
-  X
+  X,
+  Info
 } from 'lucide-react';
 import './ManagerDashboard.css';
 import '../styles/radix.css';
@@ -42,13 +44,16 @@ const ManagerDashboard = () => {
 
   // Filter states
   const [filters, setFilters] = useState({
-    propertyId: 'all',
+    listingId: 'all',
     channel: 'all',
-    category: 'all',
     rating: 'all',
     approved: 'all',
     searchTerm: ''
   });
+
+  // Category dialog state
+  const [categoryDialogOpen, setCategoryDialogOpen] = useState(false);
+  const [selectedReviewCategories, setSelectedReviewCategories] = useState([]);
 
   // Sort states
   const [sortConfig, setSortConfig] = useState({
@@ -73,7 +78,9 @@ const ManagerDashboard = () => {
         axios.get(`${API_BASE_URL}/api/filter-options`)
       ]);
 
-      setReviews(reviewsRes.data.normalizedReviews || []);
+      const reviews = reviewsRes.data.data.normalizedReviews || [];
+      console.log('Loaded reviews:', reviews.length);
+      setReviews(reviews);
       setPropertySummary(summaryRes.data || []);
       setFilterOptions(optionsRes.data || {});
     } catch (error) {
@@ -89,16 +96,14 @@ const ManagerDashboard = () => {
 
   const applyFiltersAndSort = () => {
     let filtered = [...reviews];
+    console.log('Applying filters to reviews:', reviews.length);
 
     // Apply filters
-    if (filters.propertyId && filters.propertyId !== 'all') {
-      filtered = filtered.filter(review => review.propertyId === filters.propertyId);
+    if (filters.listingId && filters.listingId !== 'all') {
+      filtered = filtered.filter(review => review.listingId === parseInt(filters.listingId));
     }
     if (filters.channel && filters.channel !== 'all') {
       filtered = filtered.filter(review => review.channel === filters.channel);
-    }
-    if (filters.category && filters.category !== 'all') {
-      filtered = filtered.filter(review => review.category === filters.category);
     }
     if (filters.rating && filters.rating !== 'all') {
       filtered = filtered.filter(review => review.rating === parseInt(filters.rating));
@@ -112,7 +117,7 @@ const ManagerDashboard = () => {
       filtered = filtered.filter(review =>
         review.comment.toLowerCase().includes(searchLower) ||
         review.guestName.toLowerCase().includes(searchLower) ||
-        review.propertyName.toLowerCase().includes(searchLower)
+        review.listingName.toLowerCase().includes(searchLower)
       );
     }
 
@@ -133,6 +138,7 @@ const ManagerDashboard = () => {
       }
     });
 
+    console.log('Filtered reviews count:', filtered.length);
     setFilteredReviews(filtered);
   };
 
@@ -152,9 +158,8 @@ const ManagerDashboard = () => {
 
   const clearFilters = () => {
     setFilters({
-      propertyId: 'all',
+      listingId: 'all',
       channel: 'all',
-      category: 'all',
       rating: 'all',
       approved: 'all',
       searchTerm: ''
@@ -165,6 +170,11 @@ const ManagerDashboard = () => {
     setToastMessage(message);
     setToastType(type);
     setToastOpen(true);
+  };
+
+  const handleShowCategories = (reviewCategories) => {
+    setSelectedReviewCategories(reviewCategories || []);
+    setCategoryDialogOpen(true);
   };
 
   const toggleReviewApproval = async (reviewId, currentApproval) => {
@@ -259,9 +269,9 @@ const ManagerDashboard = () => {
           <h2>Property Performance Overview</h2>
           <div className="property-cards">
             {propertySummary.map(property => (
-              <div key={property.propertyId} className="property-card">
+              <div key={property.listingId} className="property-card">
                 <div className="property-header">
-                  <h3>{property.propertyName}</h3>
+                  <h3>{property.listingName}</h3>
                   <div className="property-stats">
                     <span className="average-rating">
                       {getStarRating(Math.round(property.averageRating))}
@@ -343,7 +353,7 @@ const ManagerDashboard = () => {
 
               <div className="filter-group">
                 <label>Property</label>
-                <Select.Root value={filters.propertyId} onValueChange={(value) => handleFilterChange('propertyId', value)}>
+                <Select.Root value={filters.listingId} onValueChange={(value) => handleFilterChange('listingId', value)}>
                   <Select.Trigger className="select-trigger">
                     <Select.Value placeholder="All Properties" />
                     <Select.Icon className="select-icon">
@@ -397,38 +407,6 @@ const ManagerDashboard = () => {
                               <Check size={14} />
                             </Select.ItemIndicator>
                             <Select.ItemText>{channel}</Select.ItemText>
-                          </Select.Item>
-                        ))}
-                      </Select.Viewport>
-                    </Select.Content>
-                  </Select.Portal>
-                </Select.Root>
-              </div>
-
-              <div className="filter-group">
-                <label>Category</label>
-                <Select.Root value={filters.category} onValueChange={(value) => handleFilterChange('category', value)}>
-                  <Select.Trigger className="select-trigger">
-                    <Select.Value placeholder="All Categories" />
-                    <Select.Icon className="select-icon">
-                      <ChevronDown size={16} />
-                    </Select.Icon>
-                  </Select.Trigger>
-                  <Select.Portal>
-                    <Select.Content className="select-content" position="popper">
-                      <Select.Viewport className="select-viewport">
-                        <Select.Item value="all" className="select-item">
-                          <Select.ItemIndicator className="select-item-indicator">
-                            <Check size={14} />
-                          </Select.ItemIndicator>
-                          <Select.ItemText>All Categories</Select.ItemText>
-                        </Select.Item>
-                        {filterOptions.categories?.map(category => (
-                          <Select.Item key={category} value={category} className="select-item">
-                            <Select.ItemIndicator className="select-item-indicator">
-                              <Check size={14} />
-                            </Select.ItemIndicator>
-                            <Select.ItemText>{category}</Select.ItemText>
                           </Select.Item>
                         ))}
                       </Select.Viewport>
@@ -509,10 +487,10 @@ const ManagerDashboard = () => {
                     </span>
                   )}
                 </div>
-                <div className="header-cell sortable" onClick={() => handleSort('propertyName')}>
+                <div className="header-cell sortable" onClick={() => handleSort('listingName')}>
                   <MapPin size={16} />
                   Property
-                  {sortConfig.key === 'propertyName' && (
+                  {sortConfig.key === 'listingName' && (
                     <span className={`sort-indicator ${sortConfig.direction}`}>
                       {sortConfig.direction === 'desc' ? '↓' : '↑'}
                     </span>
@@ -535,7 +513,6 @@ const ManagerDashboard = () => {
                   )}
                 </div>
                 <div className="header-cell">Channel</div>
-                <div className="header-cell">Category</div>
                 <div className="header-cell">Comment</div>
                 <div className="header-cell">Status</div>
                 <div className="header-cell">Actions</div>
@@ -548,7 +525,7 @@ const ManagerDashboard = () => {
                       {format(new Date(review.reviewDate), 'MMM dd, yyyy')}
                     </div>
                     <div className="table-cell">
-                      <strong>{review.propertyName}</strong>
+                      <strong>{review.listingName}</strong>
                     </div>
                     <div className="table-cell">
                       {review.guestName}
@@ -557,13 +534,19 @@ const ManagerDashboard = () => {
                       <div className="rating-display">
                         {getStarRating(review.rating)}
                         <span>({review.rating})</span>
+                        {review.reviewCategories && review.reviewCategories.length > 0 && (
+                          <button 
+                            className="category-info-btn"
+                            onClick={() => handleShowCategories(review.reviewCategories)}
+                            title="View category breakdown"
+                          >
+                            <Info size={14} />
+                          </button>
+                        )}
                       </div>
                     </div>
                     <div className="table-cell">
                       <span className="channel-badge">{review.channel}</span>
-                    </div>
-                    <div className="table-cell">
-                      <span className="category-badge">{review.category}</span>
                     </div>
                     <div className="table-cell comment-cell">
                       <p>{review.comment}</p>
@@ -629,6 +612,44 @@ const ManagerDashboard = () => {
           </div>
         </>
       )}
+
+        {/* Category Breakdown Dialog */}
+        <Dialog.Root open={categoryDialogOpen} onOpenChange={setCategoryDialogOpen}>
+          <Dialog.Portal>
+            <Dialog.Overlay className="dialog-overlay" />
+            <Dialog.Content className="dialog-content category-dialog">
+              <Dialog.Title className="dialog-title">
+                Review Category Breakdown
+              </Dialog.Title>
+              <Dialog.Description className="dialog-description">
+                Detailed ratings for each category:
+              </Dialog.Description>
+              
+              <div className="category-breakdown">
+                {selectedReviewCategories.map((category, index) => (
+                  <div key={index} className="category-item">
+                    <div className="category-info">
+                      <span className="category-name">
+                        {category.category.charAt(0).toUpperCase() + 
+                         category.category.slice(1).replace(/_/g, ' ')}
+                      </span>
+                      <div className="category-rating">
+                        {getStarRating(category.rating)}
+                        <span className="rating-number">({category.rating})</span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <Dialog.Close asChild>
+                <button className="dialog-close-btn">
+                  Close
+                </button>
+              </Dialog.Close>
+            </Dialog.Content>
+          </Dialog.Portal>
+        </Dialog.Root>
 
           {/* Toast Notifications */}
           <Toast.Root 
