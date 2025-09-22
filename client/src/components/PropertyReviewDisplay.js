@@ -483,17 +483,6 @@ const PropertyReviewDisplay = () => {
                     <button className="btn-secondary">Get Info</button>
                   </div>
                 </div>
-                
-                <div className="lease-terms-card">
-                  <h4>Available Lease Terms</h4>
-                  <div className="lease-options">
-                    {property.leaseTerms.map((term, index) => (
-                      <div key={index} className="lease-option">
-                        <span>{term}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
               </div>
             </div>
           </div>

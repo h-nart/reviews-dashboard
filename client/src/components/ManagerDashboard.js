@@ -231,10 +231,10 @@ const ManagerDashboard = () => {
           {/* Header */}
           <header className="dashboard-header">
             <div className="header-content">
-          <h1>
+
             <img src={flexLogo} alt="Flex Living" className="dashboard-logo" />
-            <span className="dashboard-title">Reviews Dashboard</span>
-          </h1>
+            <div className="dashboard-title">Reviews Dashboard</div>
+
               <div className="view-toggle">
                 <button
                   className={selectedView === 'reviews' ? 'active' : ''}
