@@ -41,23 +41,35 @@ const normalizeHostawayReview = (hostawayReview) => {
   // Use API-provided listingMapId
   const listingMapId = hostawayReview.listingMapId;
   
-  // Calculate average rating from categories (round to nearest integer)
+  // Calculate average rating from categories, convert from 10-point to 5-point scale
   let averageRating = hostawayReview.rating;
-  if (!averageRating && hostawayReview.reviewCategory?.length > 0) {
+  if (averageRating) {
+    // Convert existing rating from 10-point to 5-point scale
+    averageRating = Math.round((averageRating / 10) * 5); // Round to nearest integer
+  } else if (hostawayReview.reviewCategory?.length > 0) {
+    // Calculate from categories and convert to 5-point scale
     const totalRating = hostawayReview.reviewCategory.reduce((sum, cat) => sum + cat.rating, 0);
-    averageRating = Math.round(totalRating / hostawayReview.reviewCategory.length);
-  }
-
-  // Determine primary category (highest rated)
-  let primaryCategory = "Overall Experience";
-  if (hostawayReview.reviewCategory?.length > 0) {
-    const sortedCategories = hostawayReview.reviewCategory.sort((a, b) => b.rating - a.rating);
-    primaryCategory = sortedCategories[0].category.charAt(0).toUpperCase() + 
-                    sortedCategories[0].category.slice(1).replace(/_/g, ' ');
+    const avgOut10 = totalRating / hostawayReview.reviewCategory.length;
+    averageRating = Math.round((avgOut10 / 10) * 5); // Round to nearest integer
   }
 
   // Get channel name from channel ID
   const channelName = channelMapping[hostawayReview.channelId] || 'unknown';
+
+  // Convert category ratings from 10-point to 5-point scale
+  const convertedCategories = (hostawayReview.reviewCategory || []).map(cat => ({
+    ...cat,
+    rating: Math.round((cat.rating / 10) * 5) // Convert to 5-point scale, round to nearest integer
+  }));
+
+  // Determine primary category (highest rated) using converted ratings
+  let primaryCategory = "Overall Experience";
+  if (convertedCategories.length > 0) {
+    const sortedCategories = [...convertedCategories].sort((a, b) => b.rating - a.rating);
+    primaryCategory = sortedCategories[0].category.charAt(0).toUpperCase() + 
+                    sortedCategories[0].category.slice(1).replace(/_/g, ' ');
+  }
+
 
   return {
     id: hostawayReview.id,
@@ -74,7 +86,7 @@ const normalizeHostawayReview = (hostawayReview) => {
     isPubliclyVisible: hostawayReview.status === "published",
     type: hostawayReview.type,
     status: hostawayReview.status, // Keep original status
-    reviewCategories: hostawayReview.reviewCategory || [],
+    reviewCategories: convertedCategories,
   };
 };
 
