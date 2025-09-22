@@ -13,7 +13,6 @@ import {
   EyeOff,
   CheckCircle,
   XCircle,
-  TrendingUp,
   Calendar,
   MapPin,
   MessageSquare,

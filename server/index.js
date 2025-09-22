@@ -1,7 +1,6 @@
 const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
-const { format } = require("date-fns");
 
 // Load environment variables
 require('dotenv').config();
@@ -10,8 +9,6 @@ const HostawayService = require("./hostawayService");
 
 const {
   getNormalizedReviews,
-  getReviewsByProperty,
-  getApprovedReviews,
   getPublicReviews,
   updateReviewApproval,
   getPropertySummary

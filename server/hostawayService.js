@@ -1,11 +1,7 @@
 const axios = require('axios');
 const { 
   hostawayMockResponse, 
-  normalizeHostawayReview,
-  getNormalizedReviews,
-  getReviewsByProperty,
-  getApprovedReviews,
-  getPublicReviews
+  normalizeHostawayReview
 } = require('./dataService');
 
 class HostawayService {
@@ -172,7 +168,7 @@ class HostawayService {
     const sortOrder = options.sortOrder || 'desc';
     
     reviews.sort((a, b) => {
-      let comparison = 0;
+      let comparison;
       
       switch (sortBy) {
         case 'submittedAt':
@@ -260,11 +256,9 @@ class HostawayService {
       const response = await this.fetchReviews(options);
       
       // Normalize and filter for public display
-      const normalizedReviews = response.result
-        .map(review => normalizeHostawayReview(review))
-        .filter(review => review.isPubliclyVisible);
-      
-      return normalizedReviews;
+        return response.result
+          .map(review => normalizeHostawayReview(review))
+          .filter(review => review.isPubliclyVisible);
     } catch (error) {
       console.error('Error fetching public reviews:', error);
       throw error;
