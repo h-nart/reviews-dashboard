@@ -24,6 +24,7 @@
       "submittedAt": "2020-08-21 22:45:14",
       "guestName": "Shane Finkelstein",
       "listingName": "2B N1 A - 29 Shoreditch Heights",
+      "listingMapId": 123456,
       "channelId": 2018
     },
     {
@@ -53,7 +54,8 @@
       "submittedAt": "2024-03-15 10:30:00",
       "guestName": "Sarah Mitchell",
       "listingName": "Flex Living Downtown - Studio 1A",
-      "channelId": 2018
+      "channelId": 2018,
+      "listingMapId": 234567
     },
     {
       "id": 7455,
@@ -82,7 +84,8 @@
       "submittedAt": "2024-03-12 14:45:00",
       "guestName": "James Rodriguez",
       "listingName": "Flex Living Downtown - Studio 1A",
-      "channelId": 2005
+      "channelId": 2005,
+      "listingMapId": 234567
     },
     {
       "id": 7456,
@@ -111,7 +114,8 @@
       "submittedAt": "2024-03-10 09:20:00",
       "guestName": "Emily Chen",
       "listingName": "Flex Living Midtown - 1BR 2A",
-      "channelId": 2000
+      "channelId": 2000,
+      "listingMapId": 345678
     },
     {
       "id": 7457,
@@ -136,7 +140,8 @@
       "submittedAt": "2024-03-08 16:15:00",
       "guestName": "Michael Thompson",
       "listingName": "Flex Living Downtown - Studio 1A",
-      "channelId": 2018
+      "channelId": 2018,
+      "listingMapId": 234567
     },
     {
       "id": 7458,
@@ -165,7 +170,8 @@
       "submittedAt": "2024-03-05 11:30:00",
       "guestName": "Lisa Wang",
       "listingName": "Flex Living Midtown - 1BR 2A",
-      "channelId": 2005
+      "channelId": 2005,
+      "listingMapId": 345678
     },
     {
       "id": 7459,
@@ -194,7 +200,8 @@
       "submittedAt": "2024-03-03 08:45:00",
       "guestName": "David Brown",
       "listingName": "Flex Living Uptown - 2BR 3C",
-      "channelId": 2000
+      "channelId": 2000,
+      "listingMapId": 456789
     },
     {
       "id": 7460,
@@ -219,7 +226,8 @@
       "submittedAt": "2024-03-01 13:20:00",
       "guestName": "Anna Kowalski",
       "listingName": "Flex Living Uptown - 2BR 3C",
-      "channelId": 2018
+      "channelId": 2018,
+      "listingMapId": 456789
     },
     {
       "id": 7461,
@@ -248,7 +256,8 @@
       "submittedAt": "2024-02-28 17:00:00",
       "guestName": "Robert Davis",
       "listingName": "Flex Living Downtown - Studio 1A",
-      "channelId": 2005
+      "channelId": 2005,
+      "listingMapId": 234567
     },
     {
       "id": 7462,
@@ -277,7 +286,8 @@
       "submittedAt": "2024-02-25 12:30:00",
       "guestName": "Jessica Martinez",
       "listingName": "Flex Living Midtown - 1BR 2A",
-      "channelId": 2000
+      "channelId": 2000,
+      "listingMapId": 345678
     },
     {
       "id": 7463,
@@ -306,7 +316,8 @@
       "submittedAt": "2024-02-22 10:15:00",
       "guestName": "Thomas Wilson",
       "listingName": "Flex Living Uptown - 2BR 3C",
-      "channelId": 2018
+      "channelId": 2018,
+      "listingMapId": 456789
     },
     {
       "id": 7464,
@@ -331,7 +342,8 @@
       "submittedAt": "2024-02-20 15:45:00",
       "guestName": "Maria Garcia",
       "listingName": "Flex Living Downtown - Studio 1A",
-      "channelId": 2005
+      "channelId": 2005,
+      "listingMapId": 234567
     },
     {
       "id": 7465,
@@ -360,7 +372,8 @@
       "submittedAt": "2024-02-18 09:30:00",
       "guestName": "Kevin Lee",
       "listingName": "Flex Living Midtown - 1BR 2A",
-      "channelId": 2000
+      "channelId": 2000,
+      "listingMapId": 345678
     },
     {
       "id": 7466,
@@ -389,7 +402,8 @@
       "submittedAt": "2024-02-15 14:20:00",
       "guestName": "Alexandra Kim",
       "listingName": "Flex Living Downtown - 1BR Deluxe",
-      "channelId": 2000
+      "channelId": 2000,
+      "listingMapId": 890123
     },
     {
       "id": 7467,
@@ -418,7 +432,8 @@
       "submittedAt": "2024-02-12 11:45:00",
       "guestName": "Mark Johnson",
       "listingName": "Flex Living Midtown - Studio 2B",
-      "channelId": 2018
+      "channelId": 2018,
+      "listingMapId": 678901
     },
     {
       "id": 7468,
@@ -443,7 +458,8 @@
       "submittedAt": "2024-02-10 16:30:00",
       "guestName": "Rachel Green",
       "listingName": "Flex Living Uptown - 1BR Garden View",
-      "channelId": 2018
+      "channelId": 2018,
+      "listingMapId": 567890
     },
     {
       "id": 7469,
@@ -472,7 +488,8 @@
       "submittedAt": "2024-02-08 13:15:00",
       "guestName": "Carlos Mendez",
       "listingName": "Flex Living Uptown - 1BR Garden View",
-      "channelId": 2005
+      "channelId": 2005,
+      "listingMapId": 567890
     },
     {
       "id": 7470,
@@ -501,7 +518,8 @@
       "submittedAt": "2024-02-05 10:20:00",
       "guestName": "Nicole Foster",
       "listingName": "Flex Living Downtown - Compact Studio",
-      "channelId": 2000
+      "channelId": 2000,
+      "listingMapId": 789012
     }
   ]
 }
