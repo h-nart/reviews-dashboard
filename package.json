@@ -1,0 +1,18 @@
+{
+  "name": "flex-reviews-dashboard",
+  "version": "1.0.0",
+  "description": "Reviews Dashboard for Flex Living - Manager dashboard and public review display",
+  "main": "server/index.js",
+  "scripts": {
+    "dev:server": "cd server && npm start",
+    "dev:client": "cd client && npm start",
+    "install:server": "cd server && npm install",
+    "install:client": "cd client && npm install --legacy-peer-deps",
+    "install:all": "npm run install:server && npm run install:client",
+    "build": "cd client && npm run build",
+    "start": "cd server && npm start"
+  },
+  "keywords": ["reviews", "dashboard", "property-management", "react", "express"],
+  "author": "Flex Living",
+  "license": "MIT"
+}
