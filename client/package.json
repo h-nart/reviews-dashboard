@@ -10,7 +10,18 @@
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "react-scripts": "5.0.1",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "axios": "^1.6.0",
+    "date-fns": "^2.29.3",
+    "lucide-react": "^0.293.0",
+    "react-router-dom": "^6.20.0",
+    "@radix-ui/react-select": "^2.0.0",
+    "@radix-ui/react-dialog": "^1.0.5",
+    "@radix-ui/react-switch": "^1.0.3",
+    "@radix-ui/react-toast": "^1.1.5",
+    "@radix-ui/react-tooltip": "^1.0.7",
+    "@radix-ui/react-dropdown-menu": "^2.0.6",
+    "@radix-ui/react-tabs": "^1.0.4"
   },
   "scripts": {
     "start": "react-scripts start",
