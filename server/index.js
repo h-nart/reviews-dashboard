@@ -183,7 +183,6 @@ app.get("/api/reviews/hostaway/:id", async (req, res) => {
       status: 'success',
       message: `Fetched and normalized review ${reviewId}`,
       data: {
-        reviewId: reviewId,
         review: normalizedReview,
         rawResponse: process.env.NODE_ENV === 'development' ? rawResponse : undefined // Include raw data only in dev
       }
