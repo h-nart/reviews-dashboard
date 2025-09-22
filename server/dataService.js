@@ -62,14 +62,6 @@ const normalizeHostawayReview = (hostawayReview) => {
     rating: Math.round((cat.rating / 10) * 5) // Convert to 5-point scale, round to nearest integer
   }));
 
-  // Determine primary category (highest rated) using converted ratings
-  let primaryCategory = "Overall Experience";
-  if (convertedCategories.length > 0) {
-    const sortedCategories = [...convertedCategories].sort((a, b) => b.rating - a.rating);
-    primaryCategory = sortedCategories[0].category.charAt(0).toUpperCase() + 
-                    sortedCategories[0].category.slice(1).replace(/_/g, ' ');
-  }
-
 
   return {
     id: hostawayReview.id,
@@ -80,7 +72,6 @@ const normalizeHostawayReview = (hostawayReview) => {
     reviewDate: new Date(hostawayReview.submittedAt).toISOString(),
     channelId: hostawayReview.channelId,
     channel: channelName,
-    category: primaryCategory,
     comment: hostawayReview.publicReview,
     isApproved: hostawayReview.status === "published",
     isPubliclyVisible: hostawayReview.status === "published",

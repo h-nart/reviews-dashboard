@@ -94,15 +94,20 @@ app.put("/api/reviews/:reviewId/approval", (req, res) => {
 app.get("/api/filter-options", (req, res) => {
   try {
     const normalizedReviews = getNormalizedReviews();
-    const properties = [...new Set(normalizedReviews.map(r => ({ id: r.propertyId, name: r.propertyName })))];
+    // Get unique properties by listing ID
+    const propertiesMap = new Map();
+    normalizedReviews.forEach(r => {
+      if (!propertiesMap.has(r.listingId)) {
+        propertiesMap.set(r.listingId, { id: r.listingId, name: r.listingName });
+      }
+    });
+    const properties = Array.from(propertiesMap.values());
     const channels = [...new Set(normalizedReviews.map(r => r.channel))];
-    const categories = [...new Set(normalizedReviews.map(r => r.category))];
     const ratings = [1, 2, 3, 4, 5];
     
     res.json({
       properties,
       channels,
-      categories,
       ratings
     });
   } catch (error) {
