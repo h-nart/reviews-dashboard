@@ -1,0 +1,242 @@
+const fs = require('fs');
+const path = require('path');
+
+// Load JSON data files
+const loadJSON = (filename) => {
+  try {
+    const filePath = path.join(__dirname, 'data', filename);
+    const rawData = fs.readFileSync(filePath, 'utf8');
+    return JSON.parse(rawData);
+  } catch (error) {
+    console.error(`Error loading ${filename}:`, error.message);
+    return null;
+  }
+};
+
+// Load Hostaway data
+const hostawayMockResponse = loadJSON('hostaway-reviews.json');
+
+// Channel ID to Channel Name mapping
+const channelMapping = {
+  2018: 'airbnbOfficial',
+  2002: 'homeaway',
+  2005: 'bookingcom',
+  2007: 'expedia',
+  2009: 'homeawayical',
+  2010: 'vrboical',
+  2000: 'direct',
+  2013: 'bookingengine',
+  2015: 'customIcal',
+  2016: 'tripadvisorical',
+  2017: 'wordpress',
+  2019: 'marriott',
+  2020: 'partner',
+  2021: 'gds',
+  2022: 'google'
+};
+
+// Generate property ID from listing name (simple approach without grouping)
+const generatePropertyId = (listingName) => {
+  return listingName.toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, '') // Remove special characters except spaces and hyphens
+    .replace(/\s+/g, '-') // Replace spaces with hyphens
+    .replace(/-+/g, '-') // Replace multiple hyphens with single
+    .replace(/^-|-$/g, ''); // Remove leading/trailing hyphens
+};
+
+// Normalize Hostaway review to internal format
+const normalizeHostawayReview = (hostawayReview) => {
+  // Generate property ID from listing name
+  const propertyId = generatePropertyId(hostawayReview.listingName);
+  
+  // Calculate average rating from categories (round to nearest integer)
+  let averageRating = hostawayReview.rating;
+  if (!averageRating && hostawayReview.reviewCategory?.length > 0) {
+    const totalRating = hostawayReview.reviewCategory.reduce((sum, cat) => sum + cat.rating, 0);
+    averageRating = Math.round(totalRating / hostawayReview.reviewCategory.length);
+  }
+
+  // Determine primary category (highest rated)
+  let primaryCategory = "Overall Experience";
+  if (hostawayReview.reviewCategory?.length > 0) {
+    const sortedCategories = hostawayReview.reviewCategory.sort((a, b) => b.rating - a.rating);
+    primaryCategory = sortedCategories[0].category.charAt(0).toUpperCase() + 
+                    sortedCategories[0].category.slice(1).replace(/_/g, ' ');
+  }
+
+  // Get channel name from channel ID
+  const channelName = channelMapping[hostawayReview.channelId] || 'unknown';
+
+  return {
+    id: hostawayReview.id,
+    propertyId: propertyId,
+    propertyName: hostawayReview.listingName, // Use full listing name as property name
+    guestName: hostawayReview.guestName,
+    rating: averageRating,
+    reviewDate: new Date(hostawayReview.submittedAt).toISOString(),
+    channelId: hostawayReview.channelId,
+    channel: channelName,
+    category: primaryCategory,
+    comment: hostawayReview.publicReview,
+    isApproved: hostawayReview.status === "published",
+    isPubliclyVisible: hostawayReview.status === "published",
+    type: hostawayReview.type,
+    status: hostawayReview.status, // Keep original status
+    reviewCategories: hostawayReview.reviewCategory || [],
+    originalData: hostawayReview // Keep original for reference
+  };
+};
+
+// Filter functions
+const filterReviewsByListing = (reviews, listingName) => {
+  return reviews.filter(review => review.listingName === listingName);
+};
+
+const filterReviewsByType = (reviews, type) => {
+  return reviews.filter(review => review.type === type);
+};
+
+const filterReviewsByChannel = (reviews, channel) => {
+  return reviews.filter(review => review.channel === channel);
+};
+
+const filterReviewsByChannelId = (reviews, channelId) => {
+  return reviews.filter(review => review.channelId === parseInt(channelId));
+};
+
+const filterReviewsByDate = (reviews, startDate, endDate) => {
+  const start = new Date(startDate);
+  const end = new Date(endDate);
+  return reviews.filter(review => {
+    const reviewDate = new Date(review.submittedAt);
+    return reviewDate >= start && reviewDate <= end;
+  });
+};
+
+const sortReviewsByDate = (reviews, ascending = false) => {
+  return reviews.sort((a, b) => {
+    const dateA = new Date(a.submittedAt);
+    const dateB = new Date(b.submittedAt);
+    return ascending ? dateA - dateB : dateB - dateA;
+  });
+};
+
+// Get normalized reviews
+const getNormalizedReviews = () => {
+  if (!hostawayMockResponse?.result) {
+    console.error('Hostaway mock response not loaded properly');
+    return [];
+  }
+  return hostawayMockResponse.result.map(normalizeHostawayReview);
+};
+
+// Filter functions for normalized data
+const getReviewsByProperty = (propertyId) => {
+  const normalized = getNormalizedReviews();
+  return normalized.filter(review => review.propertyId === propertyId);
+};
+
+const getApprovedReviews = () => {
+  const normalized = getNormalizedReviews();
+  return normalized.filter(review => review.isApproved);
+};
+
+const getPublicReviews = (propertyId = null) => {
+  const normalized = getNormalizedReviews();
+  let reviews = normalized.filter(review => review.isPubliclyVisible);
+  if (propertyId) {
+    reviews = reviews.filter(review => review.propertyId === propertyId);
+  }
+  return reviews;
+};
+
+// Property summary data (simplified without grouping)
+const getPropertySummary = () => {
+  const normalized = getNormalizedReviews();
+  const properties = {};
+  
+  normalized.forEach(review => {
+    if (!properties[review.propertyId]) {
+      properties[review.propertyId] = {
+        propertyId: review.propertyId,
+        propertyName: review.propertyName,
+        totalReviews: 0,
+        approvedReviews: 0,
+        averageRating: 0,
+        ratingDistribution: { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 },
+        channelBreakdown: {},
+        categoryBreakdown: {},
+        recentReviews: []
+      };
+    }
+    
+    const prop = properties[review.propertyId];
+    prop.totalReviews++;
+    
+    if (review.isApproved) {
+      prop.approvedReviews++;
+    }
+    
+    if (review.rating) {
+      prop.ratingDistribution[review.rating]++;
+    }
+    
+    if (!prop.channelBreakdown[review.channel]) {
+      prop.channelBreakdown[review.channel] = 0;
+    }
+    prop.channelBreakdown[review.channel]++;
+    
+    if (!prop.categoryBreakdown[review.category]) {
+      prop.categoryBreakdown[review.category] = 0;
+    }
+    prop.categoryBreakdown[review.category]++;
+  });
+  
+  // Calculate averages
+  Object.values(properties).forEach(prop => {
+    const totalRating = Object.entries(prop.ratingDistribution)
+      .reduce((sum, [rating, count]) => sum + (parseInt(rating) * count), 0);
+    prop.averageRating = prop.totalReviews > 0 ? (totalRating / prop.totalReviews).toFixed(1) : 0;
+    
+    // Get recent reviews (last 5)
+    prop.recentReviews = normalized
+      .filter(review => review.propertyId === prop.propertyId)
+      .sort((a, b) => new Date(b.reviewDate) - new Date(a.reviewDate))
+      .slice(0, 5);
+  });
+  
+  return Object.values(properties);
+};
+
+// Update review approval (for mock data)
+const updateReviewApproval = (reviewId, isApproved, isPubliclyVisible = null) => {
+  if (!hostawayMockResponse?.result) {
+    return null;
+  }
+  
+  const review = hostawayMockResponse.result.find(r => r.id === parseInt(reviewId));
+  if (review) {
+    review.status = isApproved ? 'published' : 'awaiting';
+    return normalizeHostawayReview(review);
+  }
+  return null;
+};
+
+module.exports = {
+  hostawayMockResponse,
+  channelMapping,
+  normalizeHostawayReview,
+  getNormalizedReviews,
+  getReviewsByProperty,
+  getApprovedReviews,
+  getPublicReviews,
+  getPropertySummary,
+  updateReviewApproval,
+  filterReviewsByListing,
+  filterReviewsByType,
+  filterReviewsByChannel,
+  filterReviewsByChannelId,
+  filterReviewsByDate,
+  sortReviewsByDate,
+  generatePropertyId
+};

@@ -1,0 +1,507 @@
+{
+  "status": "success",
+  "result": [
+    {
+      "id": 7453,
+      "type": "host-to-guest",
+      "status": "published",
+      "rating": null,
+      "publicReview": "Shane and family are wonderful! Would definitely host again :)",
+      "reviewCategory": [
+        {
+          "category": "cleanliness",
+          "rating": 10
+        },
+        {
+          "category": "communication",
+          "rating": 10
+        },
+        {
+          "category": "respect_house_rules",
+          "rating": 10
+        }
+      ],
+      "submittedAt": "2020-08-21 22:45:14",
+      "guestName": "Shane Finkelstein",
+      "listingName": "2B N1 A - 29 Shoreditch Heights",
+      "channelId": 2018
+    },
+    {
+      "id": 7454,
+      "type": "guest-to-host",
+      "status": "published",
+      "rating": null,
+      "publicReview": "Amazing stay! The apartment was exactly as described and the location was perfect. Sarah was an excellent host and very responsive to all our questions.",
+      "reviewCategory": [
+        {
+          "category": "cleanliness",
+          "rating": 9
+        },
+        {
+          "category": "communication",
+          "rating": 10
+        },
+        {
+          "category": "location",
+          "rating": 10
+        },
+        {
+          "category": "value",
+          "rating": 8
+        }
+      ],
+      "submittedAt": "2024-03-15 10:30:00",
+      "guestName": "Sarah Mitchell",
+      "listingName": "Flex Living Downtown - Studio 1A",
+      "channelId": 2018
+    },
+    {
+      "id": 7455,
+      "type": "guest-to-host",
+      "status": "published",
+      "rating": null,
+      "publicReview": "Great location right in the heart of downtown. Easy access to public transport and restaurants. Only minor issue was some street noise at night.",
+      "reviewCategory": [
+        {
+          "category": "location",
+          "rating": 10
+        },
+        {
+          "category": "cleanliness",
+          "rating": 8
+        },
+        {
+          "category": "communication",
+          "rating": 9
+        },
+        {
+          "category": "value",
+          "rating": 7
+        }
+      ],
+      "submittedAt": "2024-03-12 14:45:00",
+      "guestName": "James Rodriguez",
+      "listingName": "Flex Living Downtown - Studio 1A",
+      "channelId": 2005
+    },
+    {
+      "id": 7456,
+      "type": "guest-to-host",
+      "status": "published",
+      "rating": null,
+      "publicReview": "Loved the modern amenities! The smart home features were impressive and the gym facilities were top-notch. Will definitely book again.",
+      "reviewCategory": [
+        {
+          "category": "amenities",
+          "rating": 10
+        },
+        {
+          "category": "cleanliness",
+          "rating": 9
+        },
+        {
+          "category": "communication",
+          "rating": 10
+        },
+        {
+          "category": "location",
+          "rating": 8
+        }
+      ],
+      "submittedAt": "2024-03-10 09:20:00",
+      "guestName": "Emily Chen",
+      "listingName": "Flex Living Midtown - 1BR 2A",
+      "channelId": 2000
+    },
+    {
+      "id": 7457,
+      "type": "guest-to-host",
+      "status": "awaiting",
+      "rating": null,
+      "publicReview": "Had issues with the heating system during our stay. It took two days to get it fixed. The apartment was cold and uncomfortable.",
+      "reviewCategory": [
+        {
+          "category": "maintenance",
+          "rating": 2
+        },
+        {
+          "category": "communication",
+          "rating": 5
+        },
+        {
+          "category": "value",
+          "rating": 3
+        }
+      ],
+      "submittedAt": "2024-03-08 16:15:00",
+      "guestName": "Michael Thompson",
+      "listingName": "Flex Living Downtown - Studio 1A",
+      "channelId": 2018
+    },
+    {
+      "id": 7458,
+      "type": "guest-to-host",
+      "status": "published",
+      "rating": null,
+      "publicReview": "The check-in process was smooth and the staff was very helpful. Quick response to our questions via the app.",
+      "reviewCategory": [
+        {
+          "category": "communication",
+          "rating": 9
+        },
+        {
+          "category": "service",
+          "rating": 9
+        },
+        {
+          "category": "cleanliness",
+          "rating": 8
+        },
+        {
+          "category": "location",
+          "rating": 7
+        }
+      ],
+      "submittedAt": "2024-03-05 11:30:00",
+      "guestName": "Lisa Wang",
+      "listingName": "Flex Living Midtown - 1BR 2A",
+      "channelId": 2005
+    },
+    {
+      "id": 7459,
+      "type": "guest-to-host",
+      "status": "published",
+      "rating": null,
+      "publicReview": "Exceptional stay from start to finish. The apartment exceeded our expectations and the neighborhood was perfect for our needs.",
+      "reviewCategory": [
+        {
+          "category": "overall",
+          "rating": 10
+        },
+        {
+          "category": "location",
+          "rating": 10
+        },
+        {
+          "category": "cleanliness",
+          "rating": 9
+        },
+        {
+          "category": "value",
+          "rating": 9
+        }
+      ],
+      "submittedAt": "2024-03-03 08:45:00",
+      "guestName": "David Brown",
+      "listingName": "Flex Living Uptown - 2BR 3C",
+      "channelId": 2000
+    },
+    {
+      "id": 7460,
+      "type": "guest-to-host",
+      "status": "awaiting",
+      "rating": null,
+      "publicReview": "The apartment was nice but felt overpriced for what we got. Expected more amenities for the price point.",
+      "reviewCategory": [
+        {
+          "category": "value",
+          "rating": 4
+        },
+        {
+          "category": "amenities",
+          "rating": 6
+        },
+        {
+          "category": "cleanliness",
+          "rating": 8
+        }
+      ],
+      "submittedAt": "2024-03-01 13:20:00",
+      "guestName": "Anna Kowalski",
+      "listingName": "Flex Living Uptown - 2BR 3C",
+      "channelId": 2018
+    },
+    {
+      "id": 7461,
+      "type": "guest-to-host",
+      "status": "published",
+      "rating": null,
+      "publicReview": "Absolutely pristine apartment. You can tell they take cleanliness seriously. Everything was sanitized and well-maintained.",
+      "reviewCategory": [
+        {
+          "category": "cleanliness",
+          "rating": 10
+        },
+        {
+          "category": "communication",
+          "rating": 9
+        },
+        {
+          "category": "location",
+          "rating": 8
+        },
+        {
+          "category": "value",
+          "rating": 9
+        }
+      ],
+      "submittedAt": "2024-02-28 17:00:00",
+      "guestName": "Robert Davis",
+      "listingName": "Flex Living Downtown - Studio 1A",
+      "channelId": 2005
+    },
+    {
+      "id": 7462,
+      "type": "guest-to-host",
+      "status": "published",
+      "rating": null,
+      "publicReview": "Great fitness center and the rooftop terrace was a nice touch. WiFi was fast and reliable for remote work.",
+      "reviewCategory": [
+        {
+          "category": "amenities",
+          "rating": 9
+        },
+        {
+          "category": "connectivity",
+          "rating": 10
+        },
+        {
+          "category": "location",
+          "rating": 7
+        },
+        {
+          "category": "value",
+          "rating": 8
+        }
+      ],
+      "submittedAt": "2024-02-25 12:30:00",
+      "guestName": "Jessica Martinez",
+      "listingName": "Flex Living Midtown - 1BR 2A",
+      "channelId": 2000
+    },
+    {
+      "id": 7463,
+      "type": "guest-to-host",
+      "status": "published",
+      "rating": null,
+      "publicReview": "Perfect location for exploring the city. Walking distance to major attractions and excellent public transport connections.",
+      "reviewCategory": [
+        {
+          "category": "location",
+          "rating": 10
+        },
+        {
+          "category": "accessibility",
+          "rating": 10
+        },
+        {
+          "category": "cleanliness",
+          "rating": 9
+        },
+        {
+          "category": "communication",
+          "rating": 9
+        }
+      ],
+      "submittedAt": "2024-02-22 10:15:00",
+      "guestName": "Thomas Wilson",
+      "listingName": "Flex Living Uptown - 2BR 3C",
+      "channelId": 2018
+    },
+    {
+      "id": 7464,
+      "type": "guest-to-host",
+      "status": "awaiting",
+      "rating": null,
+      "publicReview": "Terrible experience with customer service. Multiple issues during our stay and no one seemed to care about resolving them.",
+      "reviewCategory": [
+        {
+          "category": "service",
+          "rating": 1
+        },
+        {
+          "category": "communication",
+          "rating": 2
+        },
+        {
+          "category": "maintenance",
+          "rating": 3
+        }
+      ],
+      "submittedAt": "2024-02-20 15:45:00",
+      "guestName": "Maria Garcia",
+      "listingName": "Flex Living Downtown - Studio 1A",
+      "channelId": 2005
+    },
+    {
+      "id": 7465,
+      "type": "guest-to-host",
+      "status": "published",
+      "rating": null,
+      "publicReview": "Really enjoyed our week-long stay. The apartment had everything we needed and the building was well-maintained.",
+      "reviewCategory": [
+        {
+          "category": "overall",
+          "rating": 8
+        },
+        {
+          "category": "amenities",
+          "rating": 8
+        },
+        {
+          "category": "maintenance",
+          "rating": 9
+        },
+        {
+          "category": "cleanliness",
+          "rating": 8
+        }
+      ],
+      "submittedAt": "2024-02-18 09:30:00",
+      "guestName": "Kevin Lee",
+      "listingName": "Flex Living Midtown - 1BR 2A",
+      "channelId": 2000
+    },
+    {
+      "id": 7466,
+      "type": "guest-to-host",
+      "status": "published",
+      "rating": null,
+      "publicReview": "Outstanding service and beautiful space! The smart home integration was seamless and the concierge team was incredibly helpful.",
+      "reviewCategory": [
+        {
+          "category": "service",
+          "rating": 10
+        },
+        {
+          "category": "amenities",
+          "rating": 10
+        },
+        {
+          "category": "communication",
+          "rating": 10
+        },
+        {
+          "category": "technology",
+          "rating": 10
+        }
+      ],
+      "submittedAt": "2024-02-15 14:20:00",
+      "guestName": "Alexandra Kim",
+      "listingName": "Flex Living Downtown - 1BR Deluxe",
+      "channelId": 2000
+    },
+    {
+      "id": 7467,
+      "type": "guest-to-host",
+      "status": "published",
+      "rating": null,
+      "publicReview": "Decent stay but the Wi-Fi was unreliable and made remote work difficult. The apartment itself was clean and comfortable.",
+      "reviewCategory": [
+        {
+          "category": "connectivity",
+          "rating": 4
+        },
+        {
+          "category": "cleanliness",
+          "rating": 8
+        },
+        {
+          "category": "comfort",
+          "rating": 7
+        },
+        {
+          "category": "value",
+          "rating": 6
+        }
+      ],
+      "submittedAt": "2024-02-12 11:45:00",
+      "guestName": "Mark Johnson",
+      "listingName": "Flex Living Midtown - Studio 2B",
+      "channelId": 2018
+    },
+    {
+      "id": 7468,
+      "type": "host-to-guest",
+      "status": "published",
+      "rating": null,
+      "publicReview": "Wonderful guests! Very respectful of the space and followed all house rules perfectly. Welcome back anytime!",
+      "reviewCategory": [
+        {
+          "category": "respect_house_rules",
+          "rating": 10
+        },
+        {
+          "category": "communication",
+          "rating": 10
+        },
+        {
+          "category": "cleanliness",
+          "rating": 9
+        }
+      ],
+      "submittedAt": "2024-02-10 16:30:00",
+      "guestName": "Rachel Green",
+      "listingName": "Flex Living Uptown - 1BR Garden View",
+      "channelId": 2018
+    },
+    {
+      "id": 7469,
+      "type": "guest-to-host",
+      "status": "published",
+      "rating": null,
+      "publicReview": "Lovely apartment with great natural light and modern fixtures. The neighborhood feels safe and has good restaurant options.",
+      "reviewCategory": [
+        {
+          "category": "location",
+          "rating": 8
+        },
+        {
+          "category": "safety",
+          "rating": 9
+        },
+        {
+          "category": "design",
+          "rating": 9
+        },
+        {
+          "category": "dining",
+          "rating": 8
+        }
+      ],
+      "submittedAt": "2024-02-08 13:15:00",
+      "guestName": "Carlos Mendez",
+      "listingName": "Flex Living Uptown - 1BR Garden View",
+      "channelId": 2005
+    },
+    {
+      "id": 7470,
+      "type": "guest-to-host",
+      "status": "awaiting",
+      "rating": null,
+      "publicReview": "The apartment photos were misleading. The space felt much smaller than advertised and some amenities weren't working properly.",
+      "reviewCategory": [
+        {
+          "category": "accuracy",
+          "rating": 3
+        },
+        {
+          "category": "amenities",
+          "rating": 4
+        },
+        {
+          "category": "space",
+          "rating": 4
+        },
+        {
+          "category": "maintenance",
+          "rating": 3
+        }
+      ],
+      "submittedAt": "2024-02-05 10:20:00",
+      "guestName": "Nicole Foster",
+      "listingName": "Flex Living Downtown - Compact Studio",
+      "channelId": 2000
+    }
+  ]
+}
