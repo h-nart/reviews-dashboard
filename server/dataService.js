@@ -65,7 +65,7 @@ const normalizeHostawayReview = (hostawayReview) => {
 
   return {
     id: hostawayReview.id,
-    listingId: listingMapId, // Use listingMapId as listingId
+    listingId: listingMapId,
     listingName: hostawayReview.listingName,
     guestName: hostawayReview.guestName,
     rating: averageRating,
@@ -75,43 +75,9 @@ const normalizeHostawayReview = (hostawayReview) => {
     comment: hostawayReview.publicReview,
     isApproved: hostawayReview.status === "published",
     type: hostawayReview.type,
-    status: hostawayReview.status, // Keep original status
+    status: hostawayReview.status,
     reviewCategories: convertedCategories,
   };
-};
-
-// Filter functions
-const filterReviewsByListing = (reviews, listingName) => {
-  return reviews.filter(review => review.listingName === listingName);
-};
-
-const filterReviewsByType = (reviews, type) => {
-  return reviews.filter(review => review.type === type);
-};
-
-const filterReviewsByChannel = (reviews, channel) => {
-  return reviews.filter(review => review.channel === channel);
-};
-
-const filterReviewsByChannelId = (reviews, channelId) => {
-  return reviews.filter(review => review.channelId === parseInt(channelId));
-};
-
-const filterReviewsByDate = (reviews, startDate, endDate) => {
-  const start = new Date(startDate);
-  const end = new Date(endDate);
-  return reviews.filter(review => {
-    const reviewDate = new Date(review.submittedAt);
-    return reviewDate >= start && reviewDate <= end;
-  });
-};
-
-const sortReviewsByDate = (reviews, ascending = false) => {
-  return reviews.sort((a, b) => {
-    const dateA = new Date(a.submittedAt);
-    const dateB = new Date(b.submittedAt);
-    return ascending ? dateA - dateB : dateB - dateA;
-  });
 };
 
 // Get normalized reviews
@@ -121,17 +87,6 @@ const getNormalizedReviews = () => {
     return [];
   }
   return hostawayMockResponse.result.map(normalizeHostawayReview);
-};
-
-// Filter functions for normalized data
-const getReviewsByProperty = (propertyId) => {
-  const normalized = getNormalizedReviews();
-  return normalized.filter(review => review.propertyId === propertyId);
-};
-
-const getApprovedReviews = () => {
-  const normalized = getNormalizedReviews();
-  return normalized.filter(review => review.isApproved);
 };
 
 const getPublicReviews = (listingId = null) => {
@@ -163,7 +118,6 @@ const getPropertySummary = () => {
         averageRating: 0,
         ratingDistribution: { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 },
         channelBreakdown: {},
-        categoryBreakdown: {},
         recentReviews: []
       };
     }
@@ -183,11 +137,6 @@ const getPropertySummary = () => {
       prop.channelBreakdown[review.channel] = 0;
     }
     prop.channelBreakdown[review.channel]++;
-    
-    if (!prop.categoryBreakdown[review.category]) {
-      prop.categoryBreakdown[review.category] = 0;
-    }
-    prop.categoryBreakdown[review.category]++;
   });
   
   // Calculate averages
@@ -251,15 +200,7 @@ module.exports = {
   normalizeHostawayReview,
   processHostawayReviews,
   getNormalizedReviews,
-  getReviewsByProperty,
-  getApprovedReviews,
   getPublicReviews,
   getPropertySummary,
-  updateReviewApproval,
-  filterReviewsByListing,
-  filterReviewsByType,
-  filterReviewsByChannel,
-  filterReviewsByChannelId,
-  filterReviewsByDate,
-  sortReviewsByDate
+  updateReviewApproval
 };
