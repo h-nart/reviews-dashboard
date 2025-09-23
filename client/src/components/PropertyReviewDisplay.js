@@ -141,6 +141,7 @@ const PropertyReviewDisplay = () => {
     );
   }
 
+  // TODO: breakdown into smaller components
   return (
     <Tooltip.Provider>
       <div className="property-page">
