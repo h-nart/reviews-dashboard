@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { format } from 'date-fns';
 import * as Select from '@radix-ui/react-select';
@@ -60,10 +60,6 @@ const ManagerDashboard = () => {
     fetchData();
   }, []);
 
-  useEffect(() => {
-    applyFiltersAndSort();
-  }, [reviews, filters, sortConfig]);
-
   const fetchData = async () => {
     try {
       setLoading(true);
@@ -89,7 +85,7 @@ const ManagerDashboard = () => {
     }
   };
 
-  const applyFiltersAndSort = () => {
+  const applyFiltersAndSort = useCallback(() => {
     let filtered = [...reviews];
     console.log('Applying filters to reviews:', reviews.length);
 
@@ -135,7 +131,11 @@ const ManagerDashboard = () => {
 
     console.log('Filtered reviews count:', filtered.length);
     setFilteredReviews(filtered);
-  };
+  }, [reviews, filters, sortConfig]);
+
+  useEffect(() => {
+    applyFiltersAndSort();
+  }, [applyFiltersAndSort]);
 
   const handleSort = (key) => {
     setSortConfig(prev => ({

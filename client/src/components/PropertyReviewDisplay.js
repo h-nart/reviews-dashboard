@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import axios from 'axios';
 import { format } from 'date-fns';
@@ -46,10 +46,6 @@ const PropertyReviewDisplay = () => {
   const [isLiked, setIsLiked] = useState(false);
   const [dialogImageOpen, setDialogImageOpen] = useState(false);
 
-  useEffect(() => {
-    fetchReviews();
-  }, [propertyId]);
-
   // Keyboard navigation for gallery
   useEffect(() => {
     const handleKeyPress = (event) => {
@@ -80,7 +76,7 @@ const PropertyReviewDisplay = () => {
     );
   };
 
-  const fetchReviews = async () => {
+  const fetchReviews = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
@@ -93,7 +89,11 @@ const PropertyReviewDisplay = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [propertyId]);
+
+  useEffect(() => {
+    fetchReviews();
+  }, [propertyId, fetchReviews]);
 
   const getStarRating = (rating) => {
     return Array.from({ length: 5 }, (_, i) => (
