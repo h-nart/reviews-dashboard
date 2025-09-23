@@ -47,6 +47,7 @@ const ManagerDashboard = () => {
     channel: 'all',
     rating: 'all',
     approved: 'all',
+    type: 'all',
     searchTerm: ''
   });
 
@@ -103,6 +104,9 @@ const ManagerDashboard = () => {
       const isApproved = filters.approved === 'true';
       filtered = filtered.filter(review => review.isApproved === isApproved);
     }
+    if (filters.type && filters.type !== 'all') {
+      filtered = filtered.filter(review => review.type === filters.type);
+    }
     if (filters.searchTerm) {
       const searchLower = filters.searchTerm.toLowerCase();
       filtered = filtered.filter(review =>
@@ -157,6 +161,7 @@ const ManagerDashboard = () => {
       channel: 'all',
       rating: 'all',
       approved: 'all',
+      type: 'all',
       searchTerm: ''
     });
   };
@@ -438,6 +443,40 @@ const ManagerDashboard = () => {
               </div>
 
               <div className="filter-group">
+                <label>Review Type</label>
+                <Select.Root value={filters.type} onValueChange={(value) => handleFilterChange('type', value)}>
+                  <Select.Trigger className="select-trigger">
+                    <Select.Value placeholder="All Types" />
+                    <Select.Icon className="select-icon">
+                      <ChevronDown size={16} />
+                    </Select.Icon>
+                  </Select.Trigger>
+                  <Select.Portal>
+                    <Select.Content className="select-content" position="popper">
+                      <Select.Viewport className="select-viewport">
+                        <Select.Item value="all" className="select-item">
+                          <Select.ItemIndicator className="select-item-indicator">
+                            <Check size={14} />
+                          </Select.ItemIndicator>
+                          <Select.ItemText>All Types</Select.ItemText>
+                        </Select.Item>
+                        {filterOptions.types?.map(type => (
+                          <Select.Item key={type} value={type} className="select-item">
+                            <Select.ItemIndicator className="select-item-indicator">
+                              <Check size={14} />
+                            </Select.ItemIndicator>
+                            <Select.ItemText>
+                              {type === 'guest-to-host' ? 'Guest to Host' : 'Host to Guest'}
+                            </Select.ItemText>
+                          </Select.Item>
+                        ))}
+                      </Select.Viewport>
+                    </Select.Content>
+                  </Select.Portal>
+                </Select.Root>
+              </div>
+
+              <div className="filter-group">
                 <label>Quick Filters</label>
                 <div className="switch-group">
                   <div className="switch-item">
@@ -503,6 +542,7 @@ const ManagerDashboard = () => {
                   )}
                 </div>
                 <div className="header-cell">Channel</div>
+                <div className="header-cell">Type</div>
                 <div className="header-cell">Comment</div>
                 <div className="header-cell">Status</div>
                 <div className="header-cell">Actions</div>
@@ -534,6 +574,11 @@ const ManagerDashboard = () => {
                     </div>
                     <div className="table-cell">
                       <span className="channel-badge">{review.channel}</span>
+                    </div>
+                    <div className="table-cell">
+                      <span className={`type-badge ${review.type === 'guest-to-host' ? 'guest-to-host' : 'host-to-guest'}`}>
+                        {review.type === 'guest-to-host' ? 'Guest → Host' : 'Host → Guest'}
+                      </span>
                     </div>
                     <div className="table-cell comment-cell">
                       <p>{review.comment}</p>

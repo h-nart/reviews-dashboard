@@ -102,11 +102,13 @@ app.get("/api/filter-options", (req, res) => {
     });
     const properties = Array.from(propertiesMap.values());
     const channels = [...new Set(normalizedReviews.map(r => r.channel))];
+    const types = [...new Set(normalizedReviews.map(r => r.type))];
     const ratings = [1, 2, 3, 4, 5];
     
     res.json({
       properties,
       channels,
+      types,
       ratings
     });
   } catch (error) {
