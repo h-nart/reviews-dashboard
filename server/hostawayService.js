@@ -1,8 +1,5 @@
 const axios = require('axios');
-const { 
-  hostawayMockResponse, 
-  normalizeHostawayReview
-} = require('./dataService');
+const {hostawayMockResponse} = require('./dataService');
 
 class HostawayService {
   constructor() {
@@ -113,8 +110,7 @@ class HostawayService {
         ...(params && { params })
       };
 
-      const response = await axios(config);
-      return response;
+      return await axios(config);
     } catch (error) {
       // Step 5: Handle 403 errors by refreshing token
       if (error.response && error.response.status === 403) {
@@ -137,8 +133,7 @@ class HostawayService {
             ...(params && { params })
           };
 
-          const response = await axios(config);
-          return response;
+          return await axios(config);
         } catch (retryError) {
           console.error('Failed to retry request after token refresh:', retryError.message);
           throw retryError;
@@ -313,137 +308,6 @@ class HostawayService {
         // Add any additional processing here
       }))
     };
-  }
-
-  async getReviewsForManager(filters = {}) {
-    try {
-      const options = {
-        type: filters.type || undefined,
-        status: filters.approved === 'true' ? 'published' : 
-               filters.approved === 'false' ? 'awaiting' : undefined,
-        channel: filters.channel !== 'all' ? filters.channel : undefined,
-        listingName: filters.propertyId !== 'all' ? this.getListingNameFromPropertyId(filters.propertyId) : undefined,
-        sortBy: filters.sortBy || 'submittedAt',
-        sortOrder: filters.sortOrder || 'desc',
-        limit: filters.limit || 50,
-        offset: filters.offset || 0
-      };
-
-      const response = await this.fetchReviews(options);
-      
-      // Normalize the reviews to internal format
-      const normalizedReviews = response.result.map(review => normalizeHostawayReview(review));
-      
-      return {
-        ...response,
-        result: normalizedReviews
-      };
-    } catch (error) {
-      console.error('Error fetching reviews for manager:', error);
-      throw error;
-    }
-  }
-
-  async getPublicReviewsForProperty(propertyId) {
-    try {
-      const listingName = this.getListingNameFromPropertyId(propertyId);
-      const options = {
-        status: 'published',
-        listingName: listingName,
-        type: 'guest-to-host', // Only show guest reviews publicly
-        sortBy: 'submittedAt',
-        sortOrder: 'desc'
-      };
-
-      const response = await this.fetchReviews(options);
-      
-      // Normalize and filter for public display
-        return response.result
-          .map(review => normalizeHostawayReview(review))
-          .filter(review => review.isApproved);
-    } catch (error) {
-      console.error('Error fetching public reviews:', error);
-      throw error;
-    }
-  }
-
-  getListingNameFromPropertyId(propertyId) {
-    // Since we're not doing multi-unit grouping, just return the propertyId
-    // as it should already be the listing name or derived from it
-    return propertyId;
-  }
-
-  async updateReviewStatus(reviewId, status) {
-    if (this.useMockData) {
-      console.log(`Mock: Updating review ${reviewId} status to ${status}`);
-      
-      // Find and update in mock data
-      const review = hostawayMockResponse.result.find(r => r.id === parseInt(reviewId));
-      if (review) {
-        review.status = status;
-        return { success: true, review: normalizeHostawayReview(review) };
-      }
-      return { success: false, error: 'Review not found' };
-    }
-
-    try {
-      const url = `${this.baseUrl}/reviews/${reviewId}`;
-      const response = await this.makeAuthenticatedRequest('PUT', url, { status });
-
-      return { success: true, review: normalizeHostawayReview(response.data) };
-    } catch (error) {
-      console.error('Failed to update review status:', error.message);
-      return { success: false, error: error.message };
-    }
-  }
-
-  async getReviewStats() {
-    try {
-      const response = await this.fetchReviews({ limit: 1000 }); // Get all reviews for stats
-      const normalizedReviews = response.result.map(review => normalizeHostawayReview(review));
-      
-      return this.calculateStats(normalizedReviews);
-    } catch (error) {
-      console.error('Error calculating review stats:', error);
-      throw error;
-    }
-  }
-
-  calculateStats(reviews) {
-    const stats = {
-      totalReviews: reviews.length,
-      publishedReviews: reviews.filter(r => r.isApproved).length,
-      pendingReviews: reviews.filter(r => !r.isApproved).length,
-      averageRating: 0,
-      ratingDistribution: { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 },
-      channelBreakdown: {},
-      categoryBreakdown: {},
-      recentReviews: reviews.slice(0, 5)
-    };
-
-    let totalRating = 0;
-    let ratedReviews = 0;
-
-    reviews.forEach(review => {
-      // Rating distribution
-      if (review.rating) {
-        stats.ratingDistribution[review.rating]++;
-        totalRating += review.rating;
-        ratedReviews++;
-      }
-
-      // Channel breakdown
-      const channel = review.channel || 'Unknown';
-      stats.channelBreakdown[channel] = (stats.channelBreakdown[channel] || 0) + 1;
-
-      // Category breakdown
-      const category = review.category || 'Other';
-      stats.categoryBreakdown[category] = (stats.categoryBreakdown[category] || 0) + 1;
-    });
-
-    stats.averageRating = ratedReviews > 0 ? (totalRating / ratedReviews).toFixed(1) : 0;
-
-    return stats;
   }
 }
 
