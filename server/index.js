@@ -49,12 +49,13 @@ app.get("/api/properties/summary", (req, res) => {
   }
 });
 
+//TODO: ccu this one DB is configure
 // Get public reviews for a specific property (for the public display page)
 app.get("/api/properties/:propertyId/public-reviews", (req, res) => {
   try {
     const { propertyId } = req.params;
-    const publicReviews = getPublicReviews(propertyId);
-    
+    const publicReviews = getPublicReviews(propertyId).filter(review => review.type === 'guest-to-host');
+
     res.json({
       propertyId,
       reviews: publicReviews,
