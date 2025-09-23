@@ -1,5 +1,4 @@
-let propertyData;
-export default propertyData = {
+const propertyData = {
     name: 'Flex Living Downtown',
         address: '123 Downtown Avenue, City Center',
         description: 'Experience the pinnacle of urban living in this stunning downtown apartment. Featuring floor-to-ceiling windows, premium finishes, and breathtaking city views, this space offers the perfect blend of luxury and convenience for the modern professional.',
@@ -33,3 +32,5 @@ export default propertyData = {
         'Pet Wash Station'
     ]
 };
+
+export default propertyData;
