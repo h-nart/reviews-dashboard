@@ -23,8 +23,8 @@
       ],
       "submittedAt": "2020-08-21 22:45:14",
       "guestName": "Shane Finkelstein",
-      "listingName": "2B N1 A - 29 Shoreditch Heights",
-      "listingMapId": 123456,
+      "listingName": "Flex Living Uptown - 1BR Garden View",
+      "listingMapId": 567890,
       "channelId": 2018
     },
     {
@@ -32,7 +32,7 @@
       "type": "guest-to-host",
       "status": "published",
       "rating": null,
-      "publicReview": "Amazing stay! The apartment was exactly as described and the location was perfect. Sarah was an excellent host and very responsive to all our questions.",
+      "publicReview": "Amazing stay! The apartment was exactly as described and the location was perfect. Sarah was an excellent host!",
       "reviewCategory": [
         {
           "category": "cleanliness",
@@ -401,9 +401,9 @@
       ],
       "submittedAt": "2024-02-15 14:20:00",
       "guestName": "Alexandra Kim",
-      "listingName": "Flex Living Downtown - 1BR Deluxe",
+      "listingName": "Flex Living Downtown - Studio 1A",
       "channelId": 2000,
-      "listingMapId": 890123
+      "listingMapId": 234567
     },
     {
       "id": 7467,
@@ -431,9 +431,9 @@
       ],
       "submittedAt": "2024-02-12 11:45:00",
       "guestName": "Mark Johnson",
-      "listingName": "Flex Living Midtown - Studio 2B",
+      "listingName": "Flex Living Midtown - 1BR 2A",
       "channelId": 2018,
-      "listingMapId": 678901
+      "listingMapId": 345678
     },
     {
       "id": 7468,
@@ -463,26 +463,22 @@
     },
     {
       "id": 7469,
-      "type": "guest-to-host",
+      "type": "host-to-guest",
       "status": "published",
       "rating": null,
-      "publicReview": "Lovely apartment with great natural light and modern fixtures. The neighborhood feels safe and has good restaurant options.",
+      "publicReview": "Carlos was an excellent guest! Very respectful of the space and left everything in perfect condition. Highly recommend and would welcome back anytime.",
       "reviewCategory": [
         {
-          "category": "location",
-          "rating": 8
+          "category": "respect_house_rules",
+          "rating": 10
         },
         {
-          "category": "safety",
+          "category": "cleanliness",
+          "rating": 10
+        },
+        {
+          "category": "communication",
           "rating": 9
-        },
-        {
-          "category": "design",
-          "rating": 9
-        },
-        {
-          "category": "dining",
-          "rating": 8
         }
       ],
       "submittedAt": "2024-02-08 13:15:00",
@@ -517,9 +513,9 @@
       ],
       "submittedAt": "2024-02-05 10:20:00",
       "guestName": "Nicole Foster",
-      "listingName": "Flex Living Downtown - Compact Studio",
+      "listingName": "Flex Living Downtown - Studio 1A",
       "channelId": 2000,
-      "listingMapId": 789012
+      "listingMapId": 234567
     }
   ]
 }
