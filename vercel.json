@@ -9,7 +9,8 @@
       "src": "client/package.json",
       "use": "@vercel/static-build",
       "config": {
-        "distDir": "build"
+        "distDir": "build",
+        "installCommand": "npm install --legacy-peer-deps"
       }
     }
   ],
@@ -22,10 +23,5 @@
       "src": "/(.*)",
       "dest": "client/$1"
     }
-  ],
-  "functions": {
-    "server/index.js": {
-      "maxDuration": 30
-    }
-  }
+  ]
 }
