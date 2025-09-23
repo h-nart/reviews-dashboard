@@ -32,6 +32,7 @@ import {
 import './PropertyReviewDisplay.css';
 import '../styles/radix.css';
 import flexLogo from '../assets/images/logo.webp';
+import propertyData from '../data/propertyData'; // Mock property data
 
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001';
 
@@ -41,116 +42,6 @@ const PropertyReviewDisplay = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Mock property data (in real app, this would come from a property API)
-  const propertyData = {
-    'flex-downtown-001': {
-      name: 'Flex Living Downtown',
-      address: '123 Downtown Avenue, City Center',
-      description: 'Experience the pinnacle of urban living in this stunning downtown apartment. Featuring floor-to-ceiling windows, premium finishes, and breathtaking city views, this space offers the perfect blend of luxury and convenience for the modern professional.',
-      images: [
-        'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80',
-        'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80',
-        'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80',
-        'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80'
-      ],
-      amenities: [
-        { name: 'High-Speed WiFi', icon: 'wifi' },
-        { name: '24/7 Concierge', icon: 'clock' },
-        { name: 'Fitness Center', icon: 'dumbbell' },
-        { name: 'Rooftop Terrace', icon: 'home' },
-        { name: 'Parking Available', icon: 'car' },
-        { name: 'Cleaning Service', icon: 'shield' }
-      ],
-      price: '$2,500',
-      priceUnit: '/month',
-      bedrooms: 1,
-      bathrooms: 1,
-      sqft: 750,
-      availability: 'Available Now',
-      leaseTerms: ['6 months', '12 months', '18 months'],
-      neighborhood: 'Downtown Core',
-      buildingFeatures: [
-        'Luxury Lobby',
-        'Package Concierge',
-        'Rooftop Deck',
-        'Fitness Center',
-        'Business Center',
-        'Pet Wash Station'
-      ]
-    },
-    'flex-midtown-002': {
-      name: 'Flex Living Midtown',
-      address: '456 Midtown Boulevard, Business District',
-      description: 'Discover sophisticated living in the heart of the business district. This contemporary apartment features smart home technology, premium appliances, and designer furnishings, creating the perfect environment for today\'s professionals.',
-      images: [
-        'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80',
-        'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80',
-        'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80',
-        'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80'
-      ],
-      amenities: [
-        { name: 'High-Speed WiFi', icon: 'wifi' },
-        { name: 'Gym Access', icon: 'dumbbell' },
-        { name: 'Coworking Space', icon: 'coffee' },
-        { name: 'Smart Home Features', icon: 'home' },
-        { name: 'Parking', icon: 'car' },
-        { name: 'Cleaning Service', icon: 'shield' }
-      ],
-      price: '$2,800',
-      priceUnit: '/month',
-      bedrooms: 1,
-      bathrooms: 1,
-      sqft: 850,
-      availability: 'Available Now',
-      leaseTerms: ['6 months', '12 months', '18 months'],
-      neighborhood: 'Midtown Business District',
-      buildingFeatures: [
-        'Executive Lounge',
-        'Conference Rooms',
-        'Sky Deck',
-        'Wellness Center',
-        'Concierge Service',
-        'Valet Parking'
-      ]
-    },
-    'flex-uptown-003': {
-      name: 'Flex Living Uptown',
-      address: '789 Uptown Street, Cultural District',
-      description: 'Immerse yourself in the vibrant cultural heart of the city. This stylish apartment combines artistic flair with modern comfort, surrounded by galleries, theaters, and the finest dining the city has to offer.',
-      images: [
-        'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80',
-        'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80',
-        'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80',
-        'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80'
-      ],
-      amenities: [
-        { name: 'High-Speed WiFi', icon: 'wifi' },
-        { name: 'Fitness Center', icon: 'dumbbell' },
-        { name: 'Community Events', icon: 'coffee' },
-        { name: 'Bike Storage', icon: 'car' },
-        { name: 'Package Service', icon: 'shield' },
-        { name: 'Security', icon: 'shield' }
-      ],
-      price: '$2,200',
-      priceUnit: '/month',
-      bedrooms: 1,
-      bathrooms: 1,
-      sqft: 700,
-      availability: 'Available Now',
-      leaseTerms: ['6 months', '12 months', '18 months'],
-      neighborhood: 'Cultural Arts District',
-      buildingFeatures: [
-        'Art Gallery',
-        'Community Garden',
-        'Creative Spaces',
-        'Yoga Studio',
-        'Library Lounge',
-        'Event Space'
-      ]
-    }
-  };
-
-  const property = propertyData[propertyId] || propertyData['flex-downtown-001'];
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isLiked, setIsLiked] = useState(false);
   const [dialogImageOpen, setDialogImageOpen] = useState(false);
@@ -179,13 +70,13 @@ const PropertyReviewDisplay = () => {
 
   const nextImage = () => {
     setCurrentImageIndex((prev) => 
-      prev === property.images.length - 1 ? 0 : prev + 1
+      prev === propertyData.images.length - 1 ? 0 : prev + 1
     );
   };
 
   const prevImage = () => {
     setCurrentImageIndex((prev) => 
-      prev === 0 ? property.images.length - 1 : prev - 1
+      prev === 0 ? propertyData.images.length - 1 : prev - 1
     );
   };
 
@@ -309,8 +200,8 @@ const PropertyReviewDisplay = () => {
             <Dialog.Root open={dialogImageOpen} onOpenChange={setDialogImageOpen}>
               <Dialog.Trigger asChild>
                 <div className="main-image" role="button" tabIndex={0}>
-                  <img src={property.images[currentImageIndex]} alt={property.name} />
-                  {property.images.length > 1 && (
+                  <img src={propertyData.images[currentImageIndex]} alt={propertyData.name} />
+                  {propertyData.images.length > 1 && (
                     <>
                       <button className="gallery-nav prev" onClick={(e) => { e.stopPropagation(); prevImage(); }}>
                         <ChevronLeft size={24} />
@@ -321,7 +212,7 @@ const PropertyReviewDisplay = () => {
                     </>
                   )}
                   <div className="image-counter">
-                    <span>{currentImageIndex + 1} / {property.images.length}</span>
+                    <span>{currentImageIndex + 1} / {propertyData.images.length}</span>
                   </div>
                   <div className="gallery-overlay">
                     <span>Click to view full gallery</span>
@@ -334,7 +225,7 @@ const PropertyReviewDisplay = () => {
                 <Dialog.Content className="dialog-content dialog-fullscreen gallery-dialog">
                   <div className="gallery-dialog-header">
                     <Dialog.Title className="dialog-title">
-                      {property.name} - Gallery
+                      {propertyData.name} - Gallery
                     </Dialog.Title>
                     <Dialog.Close className="dialog-close">
                       <X size={24} />
@@ -343,8 +234,8 @@ const PropertyReviewDisplay = () => {
                   
                   <div className="gallery-dialog-content">
                     <div className="dialog-main-image">
-                      <img src={property.images[currentImageIndex]} alt={property.name} />
-                      {property.images.length > 1 && (
+                      <img src={propertyData.images[currentImageIndex]} alt={propertyData.name} />
+                      {propertyData.images.length > 1 && (
                         <>
                           <button className="dialog-gallery-nav prev" onClick={prevImage}>
                             <ChevronLeft size={32} />
@@ -357,7 +248,7 @@ const PropertyReviewDisplay = () => {
                     </div>
                     
                     <div className="dialog-thumbnails">
-                      {property.images.map((image, index) => (
+                      {propertyData.images.map((image, index) => (
                         <button
                           key={index}
                           className={`dialog-thumbnail ${index === currentImageIndex ? 'active' : ''}`}
@@ -372,7 +263,7 @@ const PropertyReviewDisplay = () => {
               </Dialog.Portal>
             </Dialog.Root>
           <div className="image-thumbnails">
-            {property.images.map((image, index) => (
+            {propertyData.images.map((image, index) => (
               <button
                 key={index}
                 className={`thumbnail ${index === currentImageIndex ? 'active' : ''}`}
@@ -390,37 +281,37 @@ const PropertyReviewDisplay = () => {
         <div className="container">
           <div className="property-main-info">
             <div className="property-title-section">
-              <h1>{property.name}</h1>
+              <h1>{propertyData.name}</h1>
               <div className="property-location">
                 <MapPin size={18} />
-                <span>{property.address}</span>
+                <span>{propertyData.address}</span>
               </div>
               <div className="property-neighborhood">
-                <span className="neighborhood-badge">{property.neighborhood}</span>
+                <span className="neighborhood-badge">{propertyData.neighborhood}</span>
               </div>
             </div>
             <div className="property-pricing">
               <div className="price-section">
-                <span className="price">{property.price}</span>
-                <span className="price-unit">{property.priceUnit}</span>
+                <span className="price">{propertyData.price}</span>
+                <span className="price-unit">{propertyData.priceUnit}</span>
               </div>
               <div className="availability">
-                <span className="status available">{property.availability}</span>
+                <span className="status available">{propertyData.availability}</span>
               </div>
             </div>
           </div>
           <div className="property-stats">
             <div className="stat">
               <Bed size={20} />
-              <span>{property.bedrooms} Bedroom{property.bedrooms > 1 ? 's' : ''}</span>
+              <span>{propertyData.bedrooms} Bedroom{propertyData.bedrooms > 1 ? 's' : ''}</span>
             </div>
             <div className="stat">
               <Bath size={20} />
-              <span>{property.bathrooms} Bathroom{property.bathrooms > 1 ? 's' : ''}</span>
+              <span>{propertyData.bathrooms} Bathroom{propertyData.bathrooms > 1 ? 's' : ''}</span>
             </div>
             <div className="stat">
               <Home size={20} />
-              <span>{property.sqft} sq ft</span>
+              <span>{propertyData.sqft} sq ft</span>
             </div>
           </div>
         </div>
@@ -434,13 +325,13 @@ const PropertyReviewDisplay = () => {
               <div className="details-main">
                 <div className="description-section">
                   <h2>About This Property</h2>
-                  <p>{property.description}</p>
+                  <p>{propertyData.description}</p>
                 </div>
                 
                 <div className="amenities-section">
                   <h3>Apartment Features</h3>
                   <div className="amenities-grid">
-                    {property.amenities.map((amenity, index) => (
+                    {propertyData.amenities.map((amenity, index) => (
                       <div key={index} className="amenity-item">
                         {getAmenityIcon(amenity.icon)}
                         <span>{amenity.name}</span>
@@ -452,7 +343,7 @@ const PropertyReviewDisplay = () => {
                 <div className="building-features-section">
                   <h3>Building Features</h3>
                   <div className="features-list">
-                    {property.buildingFeatures.map((feature, index) => (
+                    {propertyData.buildingFeatures.map((feature, index) => (
                       <div key={index} className="feature-item">
                         <span>•</span>
                         <span>{feature}</span>
