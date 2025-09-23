@@ -515,7 +515,7 @@ const ManagerDashboard = () => {
                       {format(new Date(review.reviewDate), 'MMM dd, yyyy')}
                     </div>
                     <div className="table-cell">
-                      <strong>{review.listingName}</strong>
+                        <a href={`/property/${review.listingId}`}>{review.listingName}</a>
                     </div>
                     <div className="table-cell">
                       {review.guestName}
