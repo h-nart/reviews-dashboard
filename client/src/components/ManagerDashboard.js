@@ -223,6 +223,7 @@ const ManagerDashboard = () => {
     );
   }
 
+  // TODO: breakdown the JSX into smaller components for readability
   return (
     <Toast.Provider swipeDirection="right">
       <Tooltip.Provider>

@@ -31,7 +31,7 @@ import {
 } from 'lucide-react';
 import './PropertyReviewDisplay.css';
 import '../styles/radix.css';
-import flexLogo from '../assets/images/logo.webp'; // Add your logo import
+import flexLogo from '../assets/images/logo.webp';
 
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001';
 
