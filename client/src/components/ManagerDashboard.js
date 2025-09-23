@@ -171,14 +171,13 @@ const ManagerDashboard = () => {
     try {
       const newApproval = !currentApproval;
       await axios.put(`${API_BASE_URL}/api/reviews/${reviewId}/approval`, {
-        isApproved: newApproval,
-        isPubliclyVisible: newApproval
+        isApproved: newApproval
       });
 
       // Update local state
       setReviews(prev => prev.map(review =>
         review.id === reviewId
-          ? { ...review, isApproved: newApproval, isPubliclyVisible: newApproval }
+          ? { ...review, isApproved: newApproval }
           : review
       ));
 

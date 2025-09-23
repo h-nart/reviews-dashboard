@@ -69,12 +69,11 @@ app.get("/api/properties/:propertyId/public-reviews", (req, res) => {
 app.put("/api/reviews/:reviewId/approval", (req, res) => {
   try {
     const { reviewId } = req.params;
-    const { isApproved, isPubliclyVisible } = req.body;
+    const { isApproved } = req.body;
     
     const updatedReview = updateReviewApproval(
       parseInt(reviewId), 
-      isApproved, 
-      isPubliclyVisible
+      isApproved
     );
     
     if (updatedReview) {

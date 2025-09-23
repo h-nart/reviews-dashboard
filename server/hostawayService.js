@@ -258,7 +258,7 @@ class HostawayService {
       // Normalize and filter for public display
         return response.result
           .map(review => normalizeHostawayReview(review))
-          .filter(review => review.isPubliclyVisible);
+          .filter(review => review.isApproved);
     } catch (error) {
       console.error('Error fetching public reviews:', error);
       throw error;

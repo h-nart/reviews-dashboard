@@ -74,7 +74,6 @@ const normalizeHostawayReview = (hostawayReview) => {
     channel: channelName,
     comment: hostawayReview.publicReview,
     isApproved: hostawayReview.status === "published",
-    isPubliclyVisible: hostawayReview.status === "published",
     type: hostawayReview.type,
     status: hostawayReview.status, // Keep original status
     reviewCategories: convertedCategories,
@@ -137,7 +136,7 @@ const getApprovedReviews = () => {
 
 const getPublicReviews = (listingId = null) => {
   const normalized = getNormalizedReviews();
-  let reviews = normalized.filter(review => review.isPubliclyVisible);
+  let reviews = normalized.filter(review => review.isApproved);
   if (listingId) {
     reviews = reviews.filter(review => review.listingId === parseInt(listingId));
   }
@@ -208,7 +207,7 @@ const getPropertySummary = () => {
 };
 
 // Update review approval (for mock data)
-const updateReviewApproval = (reviewId, isApproved, isPubliclyVisible = null) => {
+const updateReviewApproval = (reviewId, isApproved) => {
   if (!hostawayMockResponse?.result) {
     return null;
   }
