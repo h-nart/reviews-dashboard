@@ -5,7 +5,7 @@ import * as Select from '@radix-ui/react-select';
 import * as Switch from '@radix-ui/react-switch';
 import * as Toast from '@radix-ui/react-toast';
 import * as Tooltip from '@radix-ui/react-tooltip';
-import * as Dialog from '@radix-ui/react-dialog';
+import CategoryBreakdown from './CategoryBreakdown';
 import {
   Star,
   Filter,
@@ -20,8 +20,7 @@ import {
   BarChart3,
   ChevronDown,
   Check,
-  X,
-  Info
+  X
 } from 'lucide-react';
 import './ManagerDashboard.css';
 import '../styles/radix.css';
@@ -50,10 +49,6 @@ const ManagerDashboard = () => {
     approved: 'all',
     searchTerm: ''
   });
-
-  // Category dialog state
-  const [categoryDialogOpen, setCategoryDialogOpen] = useState(false);
-  const [selectedReviewCategories, setSelectedReviewCategories] = useState([]);
 
   // Sort states
   const [sortConfig, setSortConfig] = useState({
@@ -170,11 +165,6 @@ const ManagerDashboard = () => {
     setToastMessage(message);
     setToastType(type);
     setToastOpen(true);
-  };
-
-  const handleShowCategories = (reviewCategories) => {
-    setSelectedReviewCategories(reviewCategories || []);
-    setCategoryDialogOpen(true);
   };
 
   const toggleReviewApproval = async (reviewId, currentApproval) => {
@@ -534,15 +524,12 @@ const ManagerDashboard = () => {
                       <div className="rating-display">
                         {getStarRating(review.rating)}
                         <span>({review.rating})</span>
-                        {review.reviewCategories && review.reviewCategories.length > 0 && (
-                          <button 
-                            className="category-info-btn"
-                            onClick={() => handleShowCategories(review.reviewCategories)}
-                            title="View category breakdown"
-                          >
-                            <Info size={14} />
-                          </button>
-                        )}
+                        <CategoryBreakdown 
+                          reviewCategories={review.reviewCategories}
+                          buttonVariant="manager"
+                          buttonText=""
+                          showIcon={true}
+                        />
                       </div>
                     </div>
                     <div className="table-cell">
@@ -613,43 +600,6 @@ const ManagerDashboard = () => {
         </>
       )}
 
-        {/* Category Breakdown Dialog */}
-        <Dialog.Root open={categoryDialogOpen} onOpenChange={setCategoryDialogOpen}>
-          <Dialog.Portal>
-            <Dialog.Overlay className="dialog-overlay" />
-            <Dialog.Content className="dialog-content category-dialog">
-              <Dialog.Title className="dialog-title">
-                Review Category Breakdown
-              </Dialog.Title>
-              <Dialog.Description className="dialog-description">
-                Detailed ratings for each category:
-              </Dialog.Description>
-              
-              <div className="category-breakdown">
-                {selectedReviewCategories.map((category, index) => (
-                  <div key={index} className="category-item">
-                    <div className="category-info">
-                      <span className="category-name">
-                        {category.category.charAt(0).toUpperCase() + 
-                         category.category.slice(1).replace(/_/g, ' ')}
-                      </span>
-                      <div className="category-rating">
-                        {getStarRating(category.rating)}
-                        <span className="rating-number">({category.rating})</span>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              <Dialog.Close asChild>
-                <button className="dialog-close-btn">
-                  Close
-                </button>
-              </Dialog.Close>
-            </Dialog.Content>
-          </Dialog.Portal>
-        </Dialog.Root>
 
           {/* Toast Notifications */}
           <Toast.Root 

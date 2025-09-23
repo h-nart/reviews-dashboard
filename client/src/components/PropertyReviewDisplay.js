@@ -3,13 +3,11 @@ import { useParams, Link } from 'react-router-dom';
 import axios from 'axios';
 import { format } from 'date-fns';
 import * as Dialog from '@radix-ui/react-dialog';
-import * as Tabs from '@radix-ui/react-tabs';
 import * as Tooltip from '@radix-ui/react-tooltip';
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
+import CategoryBreakdown from './CategoryBreakdown';
 import {
   Star,
-  Calendar,
-  User,
   ArrowLeft,
   MapPin,
   Wifi,
@@ -156,7 +154,6 @@ const PropertyReviewDisplay = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isLiked, setIsLiked] = useState(false);
   const [dialogImageOpen, setDialogImageOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState('overview');
 
   useEffect(() => {
     fetchReviews();
@@ -578,7 +575,12 @@ const PropertyReviewDisplay = () => {
                           <p>"{review.comment}"</p>
                         </div>
                         <div className="review-footer">
-                          <span className="review-category">{review.category}</span>
+                          <CategoryBreakdown 
+                            reviewCategories={review.reviewCategories}
+                            buttonVariant="property"
+                            buttonText="Categories"
+                            showIcon={true}
+                          />
                         </div>
                       </div>
                     ))}
@@ -594,6 +596,7 @@ const PropertyReviewDisplay = () => {
             )}
           </div>
         </section>
+
 
         {/* Footer CTA */}
         <section className="footer-cta">

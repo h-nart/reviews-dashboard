@@ -954,3 +954,10 @@
     max-width: 120px;
   }
 }
+
+/* Review Footer Layout */
+.review-footer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1rem;
+}
