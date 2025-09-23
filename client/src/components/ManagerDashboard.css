@@ -2,7 +2,7 @@
 .manager-dashboard {
   min-height: 100vh;
   background: linear-gradient(135deg, #284E4C 0%, #1a332f 100%);
-  padding: 0;
+  padding: 1rem;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
 }
 
@@ -359,10 +359,13 @@
 }
 
 /* Reviews Section */
+.manager-dashboard .reviews-section {
+    padding: 0;
+}
+
 .reviews-section {
   max-width: 1400px;
   margin: 1rem auto 2rem;
-  padding: 0 2rem;
 }
 
 .reviews-table {
@@ -376,7 +379,7 @@
 
 .table-header {
   display: grid;
-  grid-template-columns: 100px 200px 120px 200px 100px 1fr 100px 120px;
+  grid-template-columns: 100px 200px 120px 200px 100px 100px 1fr 100px 120px;
   background: #f7fafc;
   border-bottom: 2px solid #e2e8f0;
   font-weight: 600;
@@ -416,7 +419,7 @@
 
 .table-row {
   display: grid;
-  grid-template-columns: 100px 200px 120px 200px 100px 1fr 100px 120px;
+  grid-template-columns: 100px 200px 120px 200px 100px 100px 1fr 100px 120px;
   border-bottom: 1px solid #e2e8f0;
   transition: background-color 0.2s;
 }
@@ -478,6 +481,25 @@
   border-radius: 6px;
   font-size: 0.75rem;
   font-weight: 500;
+}
+
+.type-badge {
+  padding: 0.25rem 0.5rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.type-badge.guest-to-host {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.type-badge.host-to-guest {
+  background: #dcfce7;
+  color: #166534;
 }
 
 .category-badge {
@@ -567,15 +589,14 @@
 @media (max-width: 1200px) {
   .table-header,
   .table-row {
-    grid-template-columns: 90px 180px 100px 120px 90px 1fr 90px 100px;
+    grid-template-columns: 90px 180px 100px 120px 90px 90px 1fr 90px 100px;
   }
   
   .dashboard-header {
     padding: 1rem 1.5rem;
   }
   
-  .filters-section,
-  .reviews-section {
+  .filters-section {
     padding: 0 1.5rem;
   }
 }
@@ -592,7 +613,6 @@
   }
   
   .filters-section,
-  .reviews-section,
   .analytics-section {
     padding: 0 1rem;
   }
