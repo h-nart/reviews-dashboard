@@ -49,7 +49,7 @@ app.get("/api/properties/summary", (req, res) => {
   }
 });
 
-//TODO: ccu this one DB is configure
+//TODO: ccu this once DB is configured
 // Get public reviews for a specific property (for the public display page)
 app.get("/api/properties/:propertyId/public-reviews", (req, res) => {
   try {
