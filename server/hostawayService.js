@@ -6,30 +6,146 @@ const {
 
 class HostawayService {
   constructor() {
-    this.apiKey = process.env.HOSTAWAY_API_KEY;
-    this.accountId = process.env.HOSTAWAY_ACCOUNT_ID;
+    this.accountId = process.env.HOSTAWAY_ACCOUNT_ID; // client_id
+    this.apiKey = process.env.HOSTAWAY_API_KEY; // client_secret
     this.baseUrl = process.env.HOSTAWAY_API_URL || 'https://api.hostaway.com/v1';
-    this.useMockData = process.env.USE_MOCK_DATA === 'true' || !this.apiKey;
+    this.useMockData = process.env.USE_MOCK_DATA === 'true' || !this.apiKey || !this.accountId;
+    
+    // Token cache (will be replaced with DB storage later)
+    this.tokenCache = null;
     
     console.log(`Hostaway Service initialized - Mock Mode: ${this.useMockData}`);
   }
 
-  async getAccessToken() {
+  // Mock storage methods (to be replaced with DB calls later)
+  async storeAccessToken(token, expiresIn = 24 * 30 * 24 * 60 * 60) { // 24 months in seconds
+    const expiresAt = new Date();
+    expiresAt.setTime(expiresAt.getTime() + (expiresIn * 1000));
+    
+    this.tokenCache = {
+      access_token: token,
+      expires_at: expiresAt,
+      created_at: new Date()
+    };
+    
+    console.log(`Access token stored. Expires at: ${expiresAt.toISOString()}`);
+    // TODO: Replace with actual database storage
+    // await db.query('INSERT INTO access_tokens (token, expires_at) VALUES (?, ?)', [token, expiresAt]);
+  }
+
+  async getStoredAccessToken() {
+    // TODO: Replace with actual database retrieval
+    // const result = await db.query('SELECT * FROM access_tokens WHERE expires_at > NOW() ORDER BY created_at DESC LIMIT 1');
+    
+    if (this.tokenCache && this.tokenCache.expires_at > new Date()) {
+      console.log(`Using cached access token. Expires at: ${this.tokenCache.expires_at.toISOString()}`);
+      return this.tokenCache.access_token;
+    }
+    
+    console.log('No valid cached access token found');
+    return null;
+  }
+
+  async clearStoredAccessToken() {
+    this.tokenCache = null;
+    console.log('Cleared stored access token');
+    // TODO: Replace with actual database cleanup
+    // await db.query('DELETE FROM access_tokens WHERE expires_at <= NOW()');
+  }
+
+  async getAccessToken(forceRefresh = false) {
     if (this.useMockData) return null;
     
     try {
-      // In production, you might want to cache this token
-      const response = await axios.post(`${this.baseUrl}/auth/token`, {
-        grant_type: 'client_credentials',
-        client_id: process.env.HOSTAWAY_CLIENT_ID,
-        client_secret: process.env.HOSTAWAY_CLIENT_SECRET,
-        scope: 'general'
+      // Step 1: Check if there is non-expired token
+      if (!forceRefresh) {
+        const storedToken = await this.getStoredAccessToken();
+        if (storedToken) {
+          return storedToken;
+        }
+      }
+      
+      // Step 3: Get new token using POST /accessTokens
+      console.log('Requesting new access token from Hostaway API...');
+      const params = new URLSearchParams();
+      params.append('grant_type', 'client_credentials');
+      params.append('client_id', this.accountId);
+      params.append('client_secret', this.apiKey);
+      params.append('scope', 'general');
+
+      const response = await axios.post(`${this.baseUrl}/accessTokens`, params, {
+        headers: {
+          'Cache-control': 'no-cache',
+          'Content-type': 'application/x-www-form-urlencoded'
+        }
       });
       
-      return response.data.access_token;
+      const accessToken = response.data.access_token;
+      const expiresIn = response.data.expires_in || (24 * 30 * 24 * 60 * 60); // 24 months default
+      
+      // Step 4: Store token
+      await this.storeAccessToken(accessToken, expiresIn);
+      
+      return accessToken;
     } catch (error) {
       console.error('Failed to get Hostaway access token:', error.message);
       throw new Error('Authentication failed');
+    }
+  }
+
+  async makeAuthenticatedRequest(method, url, data = null, params = null) {
+    if (this.useMockData) {
+      throw new Error('This method should not be called in mock mode');
+    }
+
+    try {
+      const token = await this.getAccessToken();
+      const headers = {
+        'Authorization': `Bearer ${token}`,
+        'Accept': 'application/json'
+      };
+
+      const config = {
+        method,
+        url,
+        headers,
+        ...(data && { data }),
+        ...(params && { params })
+      };
+
+      const response = await axios(config);
+      return response;
+    } catch (error) {
+      // Step 5: Handle 403 errors by refreshing token
+      if (error.response && error.response.status === 403) {
+        console.log('Access denied (403) - refreshing token...');
+        await this.clearStoredAccessToken();
+        
+        try {
+          // Retry with fresh token
+          const token = await this.getAccessToken(true); // Force refresh
+          const headers = {
+            'Authorization': `Bearer ${token}`,
+            'Accept': 'application/json'
+          };
+
+          const config = {
+            method,
+            url,
+            headers,
+            ...(data && { data }),
+            ...(params && { params })
+          };
+
+          const response = await axios(config);
+          return response;
+        } catch (retryError) {
+          console.error('Failed to retry request after token refresh:', retryError.message);
+          throw retryError;
+        }
+      }
+      
+      throw error;
     }
   }
 
@@ -40,27 +156,20 @@ class HostawayService {
     }
 
     try {
-      const token = await this.getAccessToken();
-      const headers = {
-        'Authorization': `Bearer ${token}`,
-        'X-Account-Id': this.accountId,
-        'Accept': 'application/json'
-      };
-
       // Build query parameters
-      const params = new URLSearchParams();
-      if (options.listingId) params.append('listingId', options.listingId);
-      if (options.status) params.append('status', options.status);
-      if (options.type) params.append('type', options.type);
-      if (options.limit) params.append('limit', options.limit);
-      if (options.offset) params.append('offset', options.offset);
-      if (options.sortBy) params.append('sortBy', options.sortBy);
-      if (options.sortOrder) params.append('sortOrder', options.sortOrder);
+      const queryParams = {};
+      if (options.listingId) queryParams.listingId = options.listingId;
+      if (options.status) queryParams.status = options.status;
+      if (options.type) queryParams.type = options.type;
+      if (options.limit) queryParams.limit = options.limit;
+      if (options.offset) queryParams.offset = options.offset;
+      if (options.sortBy) queryParams.sortBy = options.sortBy;
+      if (options.sortOrder) queryParams.sortOrder = options.sortOrder;
 
-      const url = `${this.baseUrl}/reviews${params.toString() ? '?' + params.toString() : ''}`;
+      const url = `${this.baseUrl}/reviews`;
       
       console.log(`Fetching reviews from Hostaway API: ${url}`);
-      const response = await axios.get(url, { headers });
+      const response = await this.makeAuthenticatedRequest('GET', url, null, queryParams);
       
       return this.processApiReviews(response.data, options);
     } catch (error) {
@@ -79,17 +188,10 @@ class HostawayService {
     }
 
     try {
-      const token = await this.getAccessToken();
-      const headers = {
-        'Authorization': `Bearer ${token}`,
-        'X-Account-Id': this.accountId,
-        'Accept': 'application/json'
-      };
-
       const url = `${this.baseUrl}/reviews/${reviewId}`;
       
       console.log(`Fetching single review from Hostaway API: ${url}`);
-      const response = await axios.get(url, { headers });
+      const response = await this.makeAuthenticatedRequest('GET', url);
       
       return {
         status: 'success',
@@ -285,19 +387,8 @@ class HostawayService {
     }
 
     try {
-      const token = await this.getAccessToken();
-      const headers = {
-        'Authorization': `Bearer ${token}`,
-        'X-Account-Id': this.accountId,
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      };
-
-      const response = await axios.put(
-        `${this.baseUrl}/reviews/${reviewId}`,
-        { status },
-        { headers }
-      );
+      const url = `${this.baseUrl}/reviews/${reviewId}`;
+      const response = await this.makeAuthenticatedRequest('PUT', url, { status });
 
       return { success: true, review: normalizeHostawayReview(response.data) };
     } catch (error) {
