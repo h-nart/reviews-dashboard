@@ -4,7 +4,7 @@ const path = require('path');
 // Load JSON data files
 const loadJSON = (filename) => {
   try {
-    const filePath = path.join(__dirname, 'data', filename);
+    const filePath = path.join(__dirname, '..', 'data', filename);
     const rawData = fs.readFileSync(filePath, 'utf8');
     return JSON.parse(rawData);
   } catch (error) {

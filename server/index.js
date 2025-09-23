@@ -5,14 +5,14 @@ const bodyParser = require("body-parser");
 // Load environment variables
 require('dotenv').config();
 
-const HostawayService = require("./hostawayService");
+const HostawayService = require("./services/hostawayService");
 
 const {
   getNormalizedReviews,
   getPublicReviews,
   updateReviewApproval,
   getPropertySummary
-} = require("./dataService");
+} = require("./services/dataService");
 
 const app = express();
 const port = process.env.PORT || 3001;
@@ -137,7 +137,7 @@ app.get("/api/reviews/hostaway", async (req, res) => {
     const rawResponse = await hostawayService.fetchReviews(options);
     
     // Process and normalize using extracted function
-    const { processHostawayReviews } = require('./dataService');
+    const { processHostawayReviews } = require('./services/dataService');
     const processedData = processHostawayReviews(rawResponse);
     
     res.json({
@@ -178,7 +178,7 @@ app.get("/api/reviews/hostaway/:id", async (req, res) => {
     }
     
     // Process and normalize the single review
-    const { normalizeHostawayReview } = require('./dataService');
+    const { normalizeHostawayReview } = require('./services/dataService');
     const normalizedReview = normalizeHostawayReview(rawResponse.result);
     
     res.json({
@@ -215,7 +215,7 @@ app.listen(port, () => {
   console.log(`🚀 Flex Living Reviews Dashboard API running on port ${port}`);
   console.log(`📊 Hostaway Service: ${hostawayService.useMockData ? 'Mock Data Mode' : 'Live API Mode'}`);
   if (hostawayService.useMockData) {
-    console.log(`   Mock reviews loaded: ${require('./dataService').hostawayMockResponse.result.length} Hostaway reviews`);
+    console.log(`   Mock reviews loaded: ${require('./services/dataService').hostawayMockResponse.result.length} Hostaway reviews`);
   }
   console.log(`   Normalized reviews: ${getNormalizedReviews().length} reviews across ${getPropertySummary().length} properties`);
   console.log(`🔗 Health check: http://localhost:${port}/`);
