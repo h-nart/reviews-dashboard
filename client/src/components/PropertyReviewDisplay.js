@@ -34,7 +34,7 @@ import '../styles/radix.css';
 import flexLogo from '../assets/images/logo.webp';
 import propertyData from '../data/propertyData'; // Mock property data
 
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001';
+const API_BASE_URL = (process.env.REACT_APP_API_URL || 'http://localhost:3001').replace(/\/+$/, '');
 
 const PropertyReviewDisplay = () => {
   const { propertyId } = useParams();
@@ -80,7 +80,7 @@ const PropertyReviewDisplay = () => {
     try {
       setLoading(true);
       setError(null);
-      const response = await axios.get(`${API_BASE_URL}/api/properties/${propertyId}/public-reviews`);
+        const response = await axios.get(`${API_BASE_URL}/api/properties/${propertyId}/public-reviews`);
       setReviews(response.data.reviews || []);
     } catch (err) {
       console.error('Error fetching reviews:', err);
