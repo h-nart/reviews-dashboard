@@ -1,5 +1,6 @@
 const axios = require('axios');
 const {hostawayMockResponse} = require('./dataService');
+const TokenService = require('./tokenService');
 
 class HostawayService {
   constructor() {
@@ -8,46 +9,23 @@ class HostawayService {
     this.baseUrl = process.env.HOSTAWAY_API_URL || 'https://api.hostaway.com/v1';
     this.useMockData = process.env.USE_MOCK_DATA === 'true' || !this.apiKey || !this.accountId;
     
-    // Token cache (will be replaced with DB storage later)
-    this.tokenCache = null;
+    // Initialize token service for token storage
+    !this.useMockData && (this.tokenService = new TokenService());
     
     console.log(`Hostaway Service initialized - Mock Mode: ${this.useMockData}`);
   }
 
-  // Mock storage methods (to be replaced with DB calls later)
-  async storeAccessToken(token, expiresIn = 24 * 30 * 24 * 60 * 60) { // 24 months in seconds
-    const expiresAt = new Date();
-    expiresAt.setTime(expiresAt.getTime() + (expiresIn * 1000));
-    
-    this.tokenCache = {
-      access_token: token,
-      expires_at: expiresAt,
-      created_at: new Date()
-    };
-    
-    console.log(`Access token stored. Expires at: ${expiresAt.toISOString()}`);
-    // TODO: Replace with actual database storage
-    // await db.query('INSERT INTO access_tokens (token, expires_at) VALUES (?, ?)', [token, expiresAt]);
+  // Store access token (uses database)
+  async storeAccessToken(token) {
+    await this.tokenService.storeToken(this.accountId, token);
   }
 
   async getStoredAccessToken() {
-    // TODO: Replace with actual database retrieval
-    // const result = await db.query('SELECT * FROM access_tokens WHERE expires_at > NOW() ORDER BY created_at DESC LIMIT 1');
-    
-    if (this.tokenCache && this.tokenCache.expires_at > new Date()) {
-      console.log(`Using cached access token. Expires at: ${this.tokenCache.expires_at.toISOString()}`);
-      return this.tokenCache.access_token;
-    }
-    
-    console.log('No valid cached access token found');
-    return null;
+    return await this.tokenService.getValidToken(this.accountId);
   }
 
   async clearStoredAccessToken() {
-    this.tokenCache = null;
-    console.log('Cleared stored access token');
-    // TODO: Replace with actual database cleanup
-    // await db.query('DELETE FROM access_tokens WHERE expires_at <= NOW()');
+    await this.tokenService.clearTokens(this.accountId);
   }
 
   async getAccessToken(forceRefresh = false) {
@@ -58,11 +36,12 @@ class HostawayService {
       if (!forceRefresh) {
         const storedToken = await this.getStoredAccessToken();
         if (storedToken) {
+          // Step 2: If yes, use stored token
           return storedToken;
         }
       }
       
-      // Step 3: Get new token using POST /accessTokens
+      // Step 3: If not, get new token using POST /accessTokens
       console.log('Requesting new access token from Hostaway API...');
       const params = new URLSearchParams();
       params.append('grant_type', 'client_credentials');
@@ -78,10 +57,9 @@ class HostawayService {
       });
       
       const accessToken = response.data.access_token;
-      const expiresIn = response.data.expires_in || (24 * 30 * 24 * 60 * 60); // 24 months default
       
       // Step 4: Store token
-      await this.storeAccessToken(accessToken, expiresIn);
+      await this.storeAccessToken(accessToken);
       
       return accessToken;
     } catch (error) {
