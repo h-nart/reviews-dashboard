@@ -370,5 +370,3 @@ To integrate Google Places API, the following would be needed:
 
 ### Implementation Decision
 I considered implementing the integration with mock data. However, this would have largely duplicated what has already been done with Hostaway mock data and would not add meaningful value to the assessment. Instead, I prioritized focusing on other areas of improvement that deliver immediate and demonstrable value within the scope of this project.
-
----
