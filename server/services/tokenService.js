@@ -100,7 +100,7 @@ class TokenService {
 
   /**
    * Check if we have a valid token for a specific client
-   * @param {string} clientId - The client ID (Hostaway account ID)
+   * @param {string} clientId - The client ID
    * @returns {Promise<boolean>} True if valid token exists
    */
   async hasValidToken(clientId) {
