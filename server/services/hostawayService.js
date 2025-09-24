@@ -131,13 +131,10 @@ class HostawayService {
     try {
       // Build query parameters
       const queryParams = {};
-      if (options.listingId) queryParams.listingId = options.listingId;
-      if (options.status) queryParams.status = options.status;
+      if (options.status) queryParams.statuses = options.status;
       if (options.type) queryParams.type = options.type;
       if (options.limit) queryParams.limit = options.limit;
       if (options.offset) queryParams.offset = options.offset;
-      if (options.sortBy) queryParams.sortBy = options.sortBy;
-      if (options.sortOrder) queryParams.sortOrder = options.sortOrder;
 
       const url = `${this.baseUrl}/reviews`;
       
@@ -211,12 +208,6 @@ class HostawayService {
     let reviews = [...hostawayMockResponse.result];
 
     // Apply filters
-    if (options.listingName) {
-      reviews = reviews.filter(review => 
-        review.listingName.toLowerCase().includes(options.listingName.toLowerCase())
-      );
-    }
-
     if (options.type) {
       reviews = reviews.filter(review => review.type === options.type);
     }
@@ -224,43 +215,6 @@ class HostawayService {
     if (options.status) {
       reviews = reviews.filter(review => review.status === options.status);
     }
-
-    if (options.channel) {
-      reviews = reviews.filter(review => review.channelId === parseInt(options.channel));
-    }
-
-    if (options.startDate && options.endDate) {
-      const start = new Date(options.startDate);
-      const end = new Date(options.endDate);
-      reviews = reviews.filter(review => {
-        const reviewDate = new Date(review.submittedAt);
-        return reviewDate >= start && reviewDate <= end;
-      });
-    }
-
-    // Apply sorting
-    const sortBy = options.sortBy || 'submittedAt';
-    const sortOrder = options.sortOrder || 'desc';
-    
-    reviews.sort((a, b) => {
-      let comparison;
-      
-      switch (sortBy) {
-        case 'submittedAt':
-          comparison = new Date(a.submittedAt) - new Date(b.submittedAt);
-          break;
-        case 'rating':
-          comparison = (a.rating || 0) - (b.rating || 0);
-          break;
-        case 'guestName':
-          comparison = a.guestName.localeCompare(b.guestName);
-          break;
-        default:
-          comparison = new Date(a.submittedAt) - new Date(b.submittedAt);
-      }
-      
-      return sortOrder === 'asc' ? comparison : -comparison;
-    });
 
     // Apply pagination
     const limit = options.limit || 50;
