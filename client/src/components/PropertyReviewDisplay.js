@@ -92,6 +92,7 @@ const PropertyReviewDisplay = () => {
   }, [propertyId]);
 
   useEffect(() => {
+    document.title = propertyData.name;
     fetchReviews();
   }, [propertyId, fetchReviews]);
 

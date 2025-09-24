@@ -58,6 +58,7 @@ const ManagerDashboard = () => {
   });
 
   useEffect(() => {
+    document.title = 'Reviews Dashboard';
     fetchData();
   }, []);
 
