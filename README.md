@@ -32,7 +32,7 @@ A full-stack web application for managing property reviews with integration to t
 
 #### Infrastructure
 - **Vercel** - Serverless deployment platform
-- **Monorepo structure** - Client and server in single repository
+- **Monorepo structure** - Although, `client` and `server` are in a single repository, each directory acts as its own project. Monorepo structure was preferred for the scope of this project only.
 
 ### Key Design and Logic Decisions
 
@@ -49,7 +49,7 @@ const API_BASE_URL = (process.env.REACT_APP_API_URL || 'http://localhost:3001')
 axios.get(`${API_BASE_URL}/api/reviews/hostaway`)
 ```
 
-**Design Rationale:** Allows the url to be configured to root `/` - useful for Vercel deployments where the `server` and `client` are deployed on one server.
+**Design Rationale:** Allows the url to be configured to root `/` - useful for Vercel deployments where the `server` and `client` are deployed on one server for simpler deployment. In a real-life scenario, it's better to have each deployed separately to keep them as loosely coupled as possible.
 
 #### 2. CategoryBreakdown Component Architecture
 
@@ -105,54 +105,47 @@ Implemented OAuth2 Client Credentials flow following [Hostaway's authentication 
 
 Core REST API for property reviews and Hostaway integration (`server/index.js`):
 
-#### `GET /` - Health check
-```bash
-curl http://localhost:3001/
-curl https://reviews-dashboard-ten.vercel.app/
-```
-
 #### `GET /api/properties/summary` - Property analytics
 ```bash
-curl http://localhost:3001/api/properties/summary
 curl https://reviews-dashboard-ten.vercel.app/api/properties/summary
 ```
 
 #### `GET /api/properties/:propertyId/public-reviews` - Public reviews
 ```bash
-curl http://localhost:3001/api/properties/123456/public-reviews
+curl https://reviews-dashboard-ten.vercel.app/api/properties/{listingId}/public-reviews
 ```
 
 #### `PUT /api/reviews/:reviewId/approval` - Update approval status
 ```bash
-curl -X PUT http://localhost:3001/api/reviews/7453/approval \
+curl -X PUT https://reviews-dashboard-ten.vercel.app/api/reviews/{reviewId}/approval \
   -H "Content-Type: application/json" \
-  -d '{"isApproved": true}'
+  -d '{"isApproved": {true|false}}'
 ```
 
 #### `GET /api/filter-options` - Dashboard filter options
 ```bash
-curl http://localhost:3001/api/filter-options
+curl https://reviews-dashboard-ten.vercel.app/api/filter-options
 ```
 
 #### `GET /api/reviews/hostaway` - Fetch Hostaway reviews
 Query Parameters:
 - `type` - `guest-to-host` or `host-to-guest`
-- `status` - `published`, `awaiting`
+- `status` - `published` or `awaiting` (Hostaway API allows more values, but I simplified it to only these 2 for the scope of this project)
 - `limit` - Number of reviews to return
 - `offset` - Number of reviews to skip (default: 0)
 ```bash
-curl "http://localhost:3001/api/reviews/hostaway?type=guest-to-host&limit=10"
+curl "https://reviews-dashboard-ten.vercel.app/api/reviews/hostaway?type=guest-to-host&limit=10"
 ```
 
 #### `GET /api/reviews/hostaway/:id` - Single review by ID
 ```bash
-curl http://localhost:3001/api/reviews/hostaway/7453
+curl https://reviews-dashboard-ten.vercel.app/api/reviews/hostaway/{reviewId}
 ```
 
 ### Key Features
-- **Data Normalization**: 10-point → 5-point rating scale (0.5 rounds up)
+- **Data Normalization**: 10-point → 5-point rating scale (rounded integers for simplicity's sake)
 - **OAuth2 Token Management**: Automatic refresh with 24-month lifecycle
-- **Filtering**: By type, status, property, channel, approval status, date range
+- **Filtering**: By type and status
 - **Pagination**: Limit/offset support for large datasets
 
 ---
@@ -171,7 +164,7 @@ USE_MOCK_DATA=true                            # Set to 'false' for live API
 SUPABASE_URL=your_supabase_project_url
 SUPABASE_ANON_KEY=your_supabase_anon_key
 
-REACT_APP_API_URL=/                           # Allows Vercel to use run both client and server on same domain
+REACT_APP_API_URL=/                           # Allows Vercel to run both client and server on same domain
 ```
 ---
 ## 🗺️ Google Places API Findings
@@ -189,4 +182,4 @@ To integrate Google Places API, the following would be needed:
 2. **Data Normalization**: Google Places review data would need normalization to be uniform with what the frontend expects, similar to the Hostaway data transformation already implemented.
 
 ### Implementation Decision
-I considered implementing the integration with mock data. However, this would have largely duplicated what has already been done with Hostaway mock data and would not add meaningful value to the assessment. Instead, I prioritized focusing on other areas of improvement that deliver immediate and demonstrable value within the scope of this project.
+I considered implementing the integration with mock data. However, this would have largely mirrored what was already implemented with Hostaway mock data and would not have added meaningful value to this task. Instead, I prioritized focusing on other areas of improvement that deliver immediate and demonstrable value.
