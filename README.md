@@ -133,6 +133,11 @@ curl http://localhost:3001/api/filter-options
 ```
 
 #### `GET /api/reviews/hostaway` - Fetch Hostaway reviews
+Query Parameters:
+- `type` - `guest-to-host` or `host-to-guest`
+- `status` - `published`, `awaiting`
+- `limit` - Number of reviews to return
+- `offset` - Number of reviews to skip (default: 0)
 ```bash
 curl "http://localhost:3001/api/reviews/hostaway?type=guest-to-host&limit=10"
 ```
