@@ -551,16 +551,16 @@ const ManagerDashboard = () => {
               <div className="table-body">
                 {filteredReviews.map(review => (
                   <div key={review.id} className={`table-row ${!review.isApproved ? 'pending' : ''}`}>
-                    <div className="table-cell">
+                    <div className="table-cell" data-label="Date">
                       {format(new Date(review.reviewDate), 'MMM dd, yyyy')}
                     </div>
-                    <div className="table-cell">
+                    <div className="table-cell" data-label="Property">
                         <a href={`/property/${review.listingId}`}>{review.listingName}</a>
                     </div>
-                    <div className="table-cell">
+                    <div className="table-cell" data-label="Guest">
                       {review.guestName}
                     </div>
-                    <div className="table-cell">
+                    <div className="table-cell" data-label="Rating">
                       <div className="rating-display">
                         {getStarRating(review.rating)}
                         <span>({review.rating})</span>
@@ -572,18 +572,18 @@ const ManagerDashboard = () => {
                         />
                       </div>
                     </div>
-                    <div className="table-cell">
+                    <div className="table-cell" data-label="Channel">
                       <span className="channel-badge">{review.channel}</span>
                     </div>
-                    <div className="table-cell">
+                    <div className="table-cell" data-label="Type">
                       <span className={`type-badge ${review.type === 'guest-to-host' ? 'guest-to-host' : 'host-to-guest'}`}>
                         {review.type === 'guest-to-host' ? 'Guest → Host' : 'Host → Guest'}
                       </span>
                     </div>
-                    <div className="table-cell comment-cell">
+                    <div className="table-cell comment-cell" data-label="Comment">
                       <p>{review.comment}</p>
                     </div>
-                    <div className="table-cell">
+                    <div className="table-cell" data-label="Status">
                       <div className={`status-badge ${review.isApproved ? 'approved' : 'pending'}`}>
                         {review.isApproved ? (
                           <>
@@ -598,7 +598,7 @@ const ManagerDashboard = () => {
                         )}
                       </div>
                     </div>
-                    <div className="table-cell actions-cell">
+                    <div className="table-cell actions-cell" data-label="Actions">
                       <Tooltip.Root>
                         <Tooltip.Trigger asChild>
                           <button
