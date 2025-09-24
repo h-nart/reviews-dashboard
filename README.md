@@ -32,7 +32,7 @@ A full-stack web application for managing property reviews with integration to t
 
 #### Infrastructure
 - **Vercel** - Serverless deployment platform
-- **Monorepo structure** - Although, `client` and `server` are in a single repository, each directory acts as its own project. Monorepo structure was preferred for the scope of this project.
+- **Monorepo structure** - Although, `client` and `server` are in a single repository, each directory acts as its own project. Monorepo structure was preferred for the scope of this project only.
 
 ### Key Design and Logic Decisions
 
@@ -130,7 +130,7 @@ curl https://reviews-dashboard-ten.vercel.app/api/filter-options
 #### `GET /api/reviews/hostaway` - Fetch Hostaway reviews
 Query Parameters:
 - `type` - `guest-to-host` or `host-to-guest`
-- `status` - `published` or `awaiting` (Hostaway API allows more values, but I simplified it to only these 2 in the scope of the project)
+- `status` - `published` or `awaiting` (Hostaway API allows more values, but I simplified it to only these 2 for the scope of this project)
 - `limit` - Number of reviews to return
 - `offset` - Number of reviews to skip (default: 0)
 ```bash
