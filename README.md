@@ -4,6 +4,8 @@ A full-stack web application for managing property reviews with integration to t
 
 🌐 **Live Demo:** [https://reviews-dashboard-ten.vercel.app](https://reviews-dashboard-ten.vercel.app)
 
+**Note**: Clicking on the property name in the Manager Dashboard will route you to the property listing.
+
 ---
 
 ## 📚 Technical Documentation
