@@ -237,7 +237,7 @@ const ManagerDashboard = () => {
           <header className="dashboard-header">
             <div className="header-content">
 
-            <img src="/logo192.png" alt="Reviews Dashboard" className="dashboard-logo" />
+            <img src="../assets/images/logo192.png" alt="Reviews Dashboard" className="dashboard-logo" />
             <div className="dashboard-title">Reviews Dashboard</div>
 
               <div className="view-toggle">
