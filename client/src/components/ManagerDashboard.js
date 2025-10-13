@@ -24,7 +24,6 @@ import {
 } from 'lucide-react';
 import './ManagerDashboard.css';
 import '../styles/radix.css';
-import flexLogo from '../assets/images/logo.webp'; // Add your logo import
 
 const API_BASE_URL = (process.env.REACT_APP_API_URL || 'http://localhost:3001').replace(/\/+$/, '');
 
@@ -238,7 +237,7 @@ const ManagerDashboard = () => {
           <header className="dashboard-header">
             <div className="header-content">
 
-            <img src={flexLogo} alt="Flex Living" className="dashboard-logo" />
+            <img src="/logo192.png" alt="Reviews Dashboard" className="dashboard-logo" />
             <div className="dashboard-title">Reviews Dashboard</div>
 
               <div className="view-toggle">

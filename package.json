@@ -1,7 +1,7 @@
 {
-  "name": "flex-reviews-dashboard",
+  "name": "reviews-dashboard",
   "version": "1.0.0",
-  "description": "Reviews Dashboard for Flex Living - Manager dashboard and public review display",
+  "description": "Reviews Dashboard - Manager dashboard and public review display",
   "main": "server/index.js",
   "scripts": {
     "dev:server": "cd server && npm start",
@@ -13,6 +13,6 @@
     "start": "cd server && npm start"
   },
   "keywords": ["reviews", "dashboard", "property-management", "react", "express"],
-  "author": "Flex Living",
+  "author": "",
   "license": "MIT"
 }

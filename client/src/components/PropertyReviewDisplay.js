@@ -31,7 +31,6 @@ import {
 } from 'lucide-react';
 import './PropertyReviewDisplay.css';
 import '../styles/radix.css';
-import flexLogo from '../assets/images/logo.webp';
 import propertyData from '../data/propertyData'; // Mock property data
 
 const API_BASE_URL = (process.env.REACT_APP_API_URL || 'http://localhost:3001').replace(/\/+$/, '');
@@ -154,7 +153,7 @@ const PropertyReviewDisplay = () => {
             <span>Back to Dashboard</span>
           </Link>
           <div className="nav-logo">
-            <img src={flexLogo} alt="Flex Living" className="logo-image" />
+            <img src="/logo192.png" alt="Reviews Dashboard" className="logo-image" />
           </div>
           <div className="nav-actions">
             <Tooltip.Root>
@@ -365,7 +364,7 @@ const PropertyReviewDisplay = () => {
                     </div>
                     <div className="contact-item">
                       <Mail size={18} />
-                      <span>hello@flexliving.com</span>
+                      <span>hello@example.com</span>
                     </div>
                   </div>
                   <div className="contact-buttons">
@@ -383,7 +382,7 @@ const PropertyReviewDisplay = () => {
           <div className="container">
             <div className="reviews-header">
               <h2>Resident Reviews</h2>
-              <p className="reviews-subtitle">See what our residents are saying about their Flex Living experience</p>
+              <p className="reviews-subtitle">See what our residents are saying about their experience</p>
               {reviews.length > 0 && (
                 <div className="reviews-summary">
                   <div className="average-rating">
@@ -495,8 +494,8 @@ const PropertyReviewDisplay = () => {
         <section className="footer-cta">
           <div className="container">
             <div className="cta-content">
-              <h2>Ready to Experience Flex Living?</h2>
-              <p>Join thousands of residents who have made Flex Living their home. Schedule a tour today and discover your perfect space.</p>
+              <h2>Ready to Experience Your New Home?</h2>
+              <p>Join thousands of residents who have found their perfect space. Schedule a tour today and discover your ideal property.</p>
               <div className="cta-buttons">
                 <button className="btn-primary large">Schedule Your Tour</button>
                 <button className="btn-outline large">Learn More</button>

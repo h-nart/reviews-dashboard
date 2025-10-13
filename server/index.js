@@ -28,7 +28,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // Health check
 app.get("/", (req, res) => {
   res.json({ 
-    message: "Flex Living Reviews Dashboard API", 
+    message: "Reviews Dashboard API",
     status: "running",
     timestamp: new Date().toISOString(),
     hostaway: {
@@ -213,7 +213,7 @@ app.use((req, res) => {
 });
 
 app.listen(port, () => {
-  console.log(`🚀 Flex Living Reviews Dashboard API running on port ${port}`);
+  console.log(`🚀 Reviews Dashboard API running on port ${port}`);
   console.log(`📊 Hostaway Service: ${hostawayService.useMockData ? 'Mock Data Mode' : 'Live API Mode'}`);
   if (hostawayService.useMockData) {
     console.log(`   Mock reviews loaded: ${require('./services/dataService').hostawayMockResponse.result.length} Hostaway reviews`);
