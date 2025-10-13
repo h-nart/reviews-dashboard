@@ -153,7 +153,7 @@ const PropertyReviewDisplay = () => {
             <span>Back to Dashboard</span>
           </Link>
           <div className="nav-logo">
-            <img src="../assets/images/logo192.png" alt="Reviews Dashboard" className="logo-image" />
+            <img src="/logo192.png" alt="Reviews Dashboard" className="logo-image" />
           </div>
           <div className="nav-actions">
             <Tooltip.Root>
