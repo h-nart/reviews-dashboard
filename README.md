@@ -14,7 +14,8 @@ A full-stack web application for managing property reviews with integration to t
 
 #### Frontend
 - **React 19** - Modern React with hooks and functional components
-- **React Router DOM 6** - Client-side routing with SPA navigation
+- **React Router DOM 6** - Client-side routing with SPA navigat
+- ion
 - **Radix UI** - Accessible, unstyled component primitives
   - Select, Dialog, Switch, Toast, Tooltip, Dropdown Menu, Tabs
 - **Lucide React** - Modern icon library with consistent styling
@@ -166,20 +167,3 @@ SUPABASE_ANON_KEY=your_supabase_anon_key
 
 REACT_APP_API_URL=/                           # Allows Vercel to run both client and server on same domain
 ```
----
-## 🗺️ Google Places API Findings
-
-Integration with Google Places API is feasible but was intentionally not implemented due to the reasons outlined below:
-
-### Cost Implications
-The primary constraint is that accessing the `rating` field would trigger the **Place Details Enterprise SKU** ([pricing details](https://developers.google.com/maps/billing-and-pricing/sku-details#place-details-ent-sku)), introducing additional costs beyond the scope of the current task.
-
-### Technical Requirements
-To integrate Google Places API, the following would be needed:
-
-1. **Place ID Mapping**: The API requires a `place_id`. Integration would need mapping between `place_id` and `listingId`; Ideally we want both IDs persisting in our database.
-
-2. **Data Normalization**: Google Places review data would need normalization to be uniform with what the frontend expects, similar to the Hostaway data transformation already implemented.
-
-### Implementation Decision
-I considered implementing the integration with mock data. However, this would have largely mirrored what was already implemented with Hostaway mock data and would not have added meaningful value to this task. Instead, I prioritized focusing on other areas of improvement that deliver immediate and demonstrable value.
