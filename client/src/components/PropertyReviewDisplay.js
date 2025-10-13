@@ -31,6 +31,7 @@ import {
 } from 'lucide-react';
 import './PropertyReviewDisplay.css';
 import '../styles/radix.css';
+import logo from '../assets/images/logo192.png';
 import propertyData from '../data/propertyData'; // Mock property data
 
 const API_BASE_URL = (process.env.REACT_APP_API_URL || 'http://localhost:3001').replace(/\/+$/, '');
@@ -153,7 +154,7 @@ const PropertyReviewDisplay = () => {
             <span>Back to Dashboard</span>
           </Link>
           <div className="nav-logo">
-            <img src="/logo192.png" alt="Reviews Dashboard" className="logo-image" />
+            <img src={logo} alt="Reviews Dashboard" className="logo-image" />
           </div>
           <div className="nav-actions">
             <Tooltip.Root>
